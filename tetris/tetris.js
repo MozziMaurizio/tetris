@@ -46,6 +46,8 @@ const TetrisArea = document.getElementById('Areadigioco');
 
 var ELtetris = TetrisArea.getContext('2d');
 
+var cella = 30;
+
 var MatriceCampo = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -76,17 +78,24 @@ var MatriceCampo = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
+
+var yposinizialegriglia = 0;
+ELtetris.lineWidth = 2;
+ELtetris.strokeStyle='black';
+
 for(let righe = 0; righe < MatriceCampo.length; righe++){
         
     var riga = MatriceCampo[righe];
+    var xposinizialegriglia = 0;
     
     for(let colonne = 0; colonne < MatriceCampo[righe].length; colonne++){
-
+        
+        ELtetris.strokeRect(xposinizialegriglia, yposinizialegriglia, cella, cella);
+        xposinizialegriglia = xposinizialegriglia + cella;
+        
     }
-
+    yposinizialegriglia = yposinizialegriglia + cella;
 }
-
-var cella = 30;
 
 TetrisArea.height = cella * MatriceCampo.length;
 TetrisArea.width = cella * riga.length;
@@ -182,6 +191,9 @@ class Tetramino {
         this.height = height;
         this.colore = colore;
         this.forma = forma;
+
+        this.ypos = 0;
+        this.xpos = 0;
     }
 
     createtramino() {
@@ -190,7 +202,8 @@ class Tetramino {
         this.forma = (formetetramini[valorecasuale]);
         this.colore = (coloretramini[valorecasuale]);
         ELtetris.fillStyle = this.colore;
-        var altezzatetramino = 0;
+        var xposiniziale = this.xpos;
+        var yposiniziale = this.ypos;
         
         for(let righe = 0; righe < this.forma.length; righe++){
             var riga = this.forma[righe];
@@ -199,46 +212,33 @@ class Tetramino {
             for(let colonne = 0; colonne < this.forma[righe].length; colonne++){
                 
                 if(riga[colonne] === 1){
-                    ELtetris.fillRect(xposiniziale, this.ypos, this.width, this.height);
+                    ELtetris.fillRect(xposiniziale, yposiniziale, this.width, this.height);
                 }
         
                 xposiniziale = xposiniziale + cella;
             }
-
-            function allValuesEqualTo(riga) {
-                return riga.every(value => value === 0);
-            }
-
-            if(allValuesEqualTo(riga) == false){
-                this.ypos = this.ypos + cella;
-                var altezzatetramino = altezzatetramino + cella;
-            }
+            yposiniziale = yposiniziale + cella;
         }
-
-        console.log(altezzatetramino);
     
     }
 
     movimento(){
         this.createtramino();
+        this.ypos += cella;
 
-        if ((this.ypos) > TetrisArea.height) {
-            this.ypos = TetrisArea.height;
-        }
-
-        this.ypos -= cella;
+        
     }
 
 }
 
 var update = function() {
-    setInterval(() => {
+    setTimeout(() =>{
         requestAnimationFrame(update);
-    }, 100);
-    
+    }, 1000);
     ELtetris.clearRect(0, 0, window.innerWidth, window.innerHeight);
     tetramino.movimento();
 }
-var tetramino = new Tetramino(this.xpos, 0, this.width, this.height, this.colore, this.forma, 0.2);
+
+var tetramino = new Tetramino(this.xpos, this.ypos, this.width, this.height, this.colore, this.forma);
 tetramino.createtramino();
 update();
