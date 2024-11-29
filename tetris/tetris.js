@@ -14,8 +14,6 @@ var yposinizialegriglia = 0;
 var valorecasuale = Math.round(Math.random() * 6);
 
 //Stile e posizionamento dell'area di gioco
-TetrisArea.height = cella * MatriceCampo.length;
-TetrisArea.width = cella * MatriceCampo[0]. length;
 TetrisArea.style.background = 'red';
 TetrisArea.style.position = 'absolute';
 TetrisArea.style.top = '50%';
@@ -130,6 +128,9 @@ var MatriceCampo = [
 var formetetramini = [TetraminoT.forma, TetraminoL.forma, TetraminoJ.forma, TetraminoI.forma, TetraminoS.forma, TetraminoZ.forma, TetraminoC.forma];
 var coloretramini = [TetraminoT.colore, TetraminoL.colore, TetraminoJ.colore, TetraminoI.colore, TetraminoS.colore, TetraminoZ.colore, TetraminoC.colore];
 
+//Dimensioni area di gioco
+TetrisArea.height = cella * MatriceCampo.length;
+TetrisArea.width = cella * MatriceCampo[0]. length;
 
 //////////////////////////////////////////////////////FUNZIONI///////////////////////////////////////////////////////////////
 
