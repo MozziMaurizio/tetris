@@ -80,30 +80,41 @@ var MatriceCampo = [
 
 
 var yposinizialegriglia = 0;
-ELtetris.lineWidth = 2;
-ELtetris.strokeStyle='black';
-
-for(let righe = 0; righe < MatriceCampo.length; righe++){
-        
-    var riga = MatriceCampo[righe];
-    var xposinizialegriglia = 0;
-    
-    for(let colonne = 0; colonne < MatriceCampo[righe].length; colonne++){
-        
-        ELtetris.strokeRect(xposinizialegriglia, yposinizialegriglia, cella, cella);
-        xposinizialegriglia = xposinizialegriglia + cella;
-        
-    }
-    yposinizialegriglia = yposinizialegriglia + cella;
-}
 
 TetrisArea.height = cella * MatriceCampo.length;
-TetrisArea.width = cella * riga.length;
+TetrisArea.width = cella * MatriceCampo[0]. length;
 TetrisArea.style.background = 'red';
 TetrisArea.style.position = 'absolute';
 TetrisArea.style.top = '50%';
 TetrisArea.style.left = '50%';
 TetrisArea.style.transform = 'translate(-50%, -50%)';
+
+function disegnaGriglia() {
+    for(let righe = 0; righe < MatriceCampo.length; righe++){
+        
+        var riga = MatriceCampo[righe];
+        var xposinizialegriglia = 0;
+        
+        for(let colonne = 0; colonne < MatriceCampo[righe].length; colonne++){
+            
+            // ELtetris.strokeRect(xposinizialegriglia, yposinizialegriglia, cella, cella);
+            // xposinizialegriglia = xposinizialegriglia + cella;
+            const x = colonne * cella;
+            const y = righe * cella;
+    
+            ELtetris.lineWidth = 2;
+            ELtetris.strokeStyle='black';
+            ELtetris.strokeRect(x, y, cella, cella);
+            
+            
+        }
+        // yposinizialegriglia = yposinizialegriglia + cella;
+    }
+}
+
+disegnaGriglia();
+
+
 
 const TetraminoT = {
     forma : [
@@ -208,7 +219,7 @@ class Tetramino {
         for(let righe = 0; righe < this.forma.length; righe++){
             var riga = this.forma[righe];
             var xposiniziale = (TetrisArea.width / 2) - (this.width * (this.forma.length / 2));
-            
+            // var xposiniziale = (TetrisArea.width / 2) - this.width * 2
             for(let colonne = 0; colonne < this.forma[righe].length; colonne++){
                 
                 if(riga[colonne] === 1){
@@ -232,11 +243,21 @@ class Tetramino {
 }
 
 var update = function() {
-    setTimeout(() =>{
-        requestAnimationFrame(update);
-    }, 1000);
+   
     ELtetris.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    disegnaGriglia();
+    
     tetramino.movimento();
+
+    if ((tetramino.ypos + cella) < TetrisArea.height) {
+        setTimeout(() =>{
+            requestAnimationFrame(update);
+        }, 1000);
+    } else {
+        tetramino.ypos = this.ypos;
+    }
+    
 }
 
 var tetramino = new Tetramino(this.xpos, this.ypos, this.width, this.height, this.colore, this.forma);
