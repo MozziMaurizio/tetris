@@ -1,52 +1,8 @@
-// var matriceT = [
-//     [0, 1, 0],
-//     [1, 1, 1],
-//     [0, 0, 0]
-// ];
-
-// var matriceL = [
-//     [1, 0, 0, 0],
-//     [1, 1, 1, 1],
-//     [0, 0, 0, 0],
-//     [0, 0, 0, 0]
-// ];
-
-// var matriceJ = [
-//     [0, 0, 0, 1],
-//     [1, 1, 1, 1],
-//     [0, 0, 0, 0],
-//     [0, 0, 0, 0]
-// ];
-
-// var matriceI = [
-//     [0, 1, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 1, 0, 0]
-// ];
-
-// var matriceS = [
-//     [0, 1, 1],
-//     [1, 1, 0],
-//     [0, 0, 0]
-// ];
-
-// var matriceZ = [
-//     [1, 1, 0],
-//     [0, 1, 1],
-//     [0, 0, 0]
-// ];
-
-// var matriceC = [
-//     [1, 1],
-//     [1, 1]
-// ];
-
 const TetrisArea = document.getElementById('Areadigioco');
 
 var ELtetris = TetrisArea.getContext('2d');
 
-var cella = 30;
+var cella = 20;
 
 var MatriceCampo = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -83,22 +39,26 @@ var yposinizialegriglia = 0;
 ELtetris.lineWidth = 2;
 ELtetris.strokeStyle='black';
 
-for(let righe = 0; righe < MatriceCampo.length; righe++){
-        
-    var riga = MatriceCampo[righe];
-    var xposinizialegriglia = 0;
-    
-    for(let colonne = 0; colonne < MatriceCampo[righe].length; colonne++){
-        
-        ELtetris.strokeRect(xposinizialegriglia, yposinizialegriglia, cella, cella);
-        xposinizialegriglia = xposinizialegriglia + cella;
-        
+function disegnaarea() {
+    yposinizialegriglia = 0;
+    for (let righe = 0; righe < MatriceCampo.length; righe++) {
+        var xposinizialegriglia = 0;
+
+        for (let colonne = 0; colonne < MatriceCampo[righe].length; colonne++) {
+            ELtetris.strokeRect(xposinizialegriglia, yposinizialegriglia, cella, cella);
+            xposinizialegriglia = xposinizialegriglia + cella;
+        }
+        yposinizialegriglia = yposinizialegriglia + cella;
     }
-    yposinizialegriglia = yposinizialegriglia + cella;
+}
+
+
+for(let righe = 0; righe < MatriceCampo.length; righe++){
+    var rigagriglia = MatriceCampo[righe];
 }
 
 TetrisArea.height = cella * MatriceCampo.length;
-TetrisArea.width = cella * riga.length;
+TetrisArea.width = cella * rigagriglia.length;
 TetrisArea.style.background = 'red';
 TetrisArea.style.position = 'absolute';
 TetrisArea.style.top = '50%';
@@ -207,7 +167,8 @@ class Tetramino {
         
         for(let righe = 0; righe < this.forma.length; righe++){
             var riga = this.forma[righe];
-            var xposiniziale = (TetrisArea.width / 2) - (this.width * (this.forma.length / 2));
+            var xposiniziale = ((rigagriglia.length / 2) - Math.floor(riga.length / 2)) * cella;
+            console.log(xposiniziale);
             
             for(let colonne = 0; colonne < this.forma[righe].length; colonne++){
                 
@@ -225,8 +186,9 @@ class Tetramino {
     movimento(){
         this.createtramino();
         this.ypos += cella;
-
-        
+        if ((this.ypos - 60) > TetrisArea.height) {
+            this.ypos = TetrisArea.height - 60;
+        }
     }
 
 }
@@ -234,8 +196,9 @@ class Tetramino {
 var update = function() {
     setTimeout(() =>{
         requestAnimationFrame(update);
-    }, 1000);
+    }, 100);
     ELtetris.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    disegnaarea();
     tetramino.movimento();
 }
 
