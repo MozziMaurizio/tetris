@@ -165,7 +165,7 @@ function disegnaGriglia() {
 
 //////////////////////////////////////////////////COSTRUTTORI//////////////////////////////////////////////////////////////7
 class Tetramino {
-    constructor(xpos, ypos, width, height, colore, forma, altezza) {
+    constructor(xpos, ypos, width, height, colore, forma, altezza, lunghezza) {
         this.xpos = xpos;
         this.ypos = ypos;
         this.width = width;
@@ -173,6 +173,7 @@ class Tetramino {
         this.colore = colore;
         this.forma = forma;
         this.altezza = altezza;
+        this.lunghezza = lunghezza;
 
         this.ypos = 0;
         this.xpos = 0;
@@ -192,7 +193,8 @@ class Tetramino {
             var riga = this.forma[righe];
             
             //calcolo pos X iniziale tetramino 
-            var xposiniziale = ((MatriceCampo[0].length / 2) - Math.floor(riga.length / 2)) * cella;
+            xposiniziale = this.xpos + (((MatriceCampo[0].length / 2) - Math.floor(riga.length / 2)) * cella);
+            
             //itera attraverso le colonne della riga corrente del tetramino creato
             for(let colonne = 0; colonne < this.forma[righe].length; colonne++){
                 //se la cella della matrice contiene 1 => disegnare blocco
@@ -214,6 +216,8 @@ class Tetramino {
 
             yposiniziale = yposiniziale + cella;
         }
+        console.log('assex ' + this.xpos);
+        //console.log('assey ' + this.ypos);
     }
 
     movimento(){
@@ -227,30 +231,42 @@ class Tetramino {
         }
     }
 
-
-    movimentorr(){
+    movimentoorr(){
         document.addEventListener("keydown", (event) => {
             if (event.key === 'ArrowLeft') {
                 console.log('sinistra');
-                tetramino.xpos -= cella;
+                ELtetris.clearRect(0, 0, window.innerWidth, window.innerHeight);
+                disegnaGriglia();
+                this.createtramino();
+                if((tetramino.xpos - this.lunghezza) > 0){
+                    tetramino.xpos -= cella;
+                }
                 console.log(tetramino.xpos);
             }
             if (event.key === 'ArrowRight') {
                 console.log('destra');
+                ELtetris.clearRect(0, 0, window.innerWidth, window.innerHeight);
+                disegnaGriglia();
+                this.createtramino();
                 tetramino.xpos += cella;
             }
             if (event.key === 'ArrowDown') {
                 console.log('giu');
-                tetramino.ypos += cella;
+                ELtetris.clearRect(0, 0, window.innerWidth, window.innerHeight);
+                disegnaGriglia();
+                this.createtramino();
+                if ((tetramino.ypos + this.altezza) < TetrisArea.height) {
+                    tetramino.ypos += cella;
+                }
             }
         });
     }
 }
 
-//oooo
 disegnaGriglia();
 
 var tetramino = new Tetramino(this.xpos, this.ypos, this.width, this.height, this.colore, this.forma);
 tetramino.createtramino();
+tetramino.movimentoorr();
 
 update();
