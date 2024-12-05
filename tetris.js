@@ -247,7 +247,6 @@ class Tetramino {
     }
 }
 
-//prova
 disegnaGriglia();
 
 var tetramino = new Tetramino(this.xpos, this.ypos, this.width, this.height, this.colore, this.forma);
