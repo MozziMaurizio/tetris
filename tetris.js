@@ -120,7 +120,7 @@ var MatriceCampo = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -218,28 +218,55 @@ class Tetramino {
     //     //MatriceCampo[(this.ypos / cella) + altezzaReale][this.xpos / cella] === 0
     // }
 
-    calcolaAltezzacolonna(){
-        var arrayAltVolonne = [];
-        for (let righe = 0; righe < this.forma.length; righe++) {
-            //console.log('riga ' + righe);
-            for (let colonne = 0; colonne < this.forma[righe].length; colonne++) {
-                //console.log(colonne);
-                if (this.forma[righe][colonne] === 1) {
-                    var altezzaC = 0;
-                    altezzaC = righe + 1;
+    bloccaTetramino(){
+        for (let righe = 0; righe < tetramino.forma.length; righe++) {
+            for (let colonne = 0; colonne < tetramino.forma[righe].length; colonne++) {
+                if (tetramino.forma[righe][colonne] === 1) {
+                    var stampay = tetramino.ypos + righe * cella;
+                    var stampax = tetramino.xpos + colonne * cella;
+                    MatriceCampo[stampay / cella][stampax / cella] = 1;
                 }
             }
-            arrayAltVolonne.push(altezzaC);
         }
-        console.log(arrayAltVolonne);
+        console.log(MatriceCampo);
+        tetramino = new Tetramino();
+    }
+
+    calcolaAltezzaColonna() {
+        const arrayAltColonne = [];
+    
+        for (let colonna = 0; colonna < this.forma[0].length; colonna++) {
+            let altezzaC = -1;
+    
+            for (let riga = this.forma.length - 1; riga >= 0; riga--) { 
+                if (this.forma[riga][colonna] === 1) {
+                    altezzaC = riga + 1;
+                    break;
+                }
+            }
+            arrayAltColonne.push(altezzaC);
+        }
+    
+        return arrayAltColonne;
     }
 
     movimentoVert() {
-        // Sposta il tetramino verso il basso
-        const altezzaReale = this.calcolaAltezza();
-        if (this.ypos + altezzaReale * cella < TetrisArea.height && MatriceCampo[(this.ypos / cella) + altezzaReale][this.xpos / cella] === 0) {
-            this.ypos += cella;
+        const altezzeColonne = this.calcolaAltezzaColonna();
+        const YinMatrice = this.ypos / cella;
+
+        for (let colonna = 0; colonna < altezzeColonne.length; colonna++) {
+            const Basetetramino = YinMatrice + altezzeColonne[colonna];
+            const XinMatrice = this.xpos / cella + colonna;
+    
+            // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
+            if (Basetetramino > MatriceCampo.length || MatriceCampo[Basetetramino]?.[XinMatrice] !== 0) {
+                this.bloccaTetramino(); // Blocca il tetramino nella sua posizione attuale
+                return;
+            }
         }
+    
+        // Nessuna collisione, sposta il tetramino verso il basso
+        this.ypos += cella;
     }
 
     movimentoOrizzontale(direzione) {
@@ -269,48 +296,4 @@ document.addEventListener("keydown", (event) => {
     aggiorna();
 });
 
-//Prende il tempo attuale in ms
-let ultimoAggiornamento = Date.now();
-//intervallo di tempo
-const tempoCaduta = 1000;
-
-function cadutaAutomatica() {
-    //Prende il tempo attuale in ms e incrementa con la richiesta dei frame
-    const tempoOra = Date.now();
-    //Quando la differenza tra il tempo attuale e l'ultimo aggiornamento è maggiore o uguale al'intervallo aggiorna la posizione y e l'ultimo aggiornamento
-    if (tempoOra - ultimoAggiornamento >= tempoCaduta) {
-        tetramino.movimentoVert();
-        ultimoAggiornamento = tempoOra;
-    }
-    aggiorna();
-    requestAnimationFrame(cadutaAutomatica);
-}
-
-requestAnimationFrame(cadutaAutomatica);
-
-const tetramino = new Tetramino();
-
-tetramino.calcolaAltezzacolonna();
-
-
-document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowUp") {
-        // console.log(tetramino.xpos);
-        // console.log(tetramino.ypos);
-        //console.log(MatriceCampo[tetramino.ypos / cella][tetramino.xpos / cella]);
-        // MatriceCampo[tetramino.ypos / cella][tetramino.xpos / cella] = 1;
-        // console.log(MatriceCampo);
-
-        for (let righe = 0; righe < tetramino.forma.length; righe++) {
-            for (let colonne = 0; colonne < tetramino.forma[righe].length; colonne++) {
-                if (tetramino.forma[righe][colonne] === 1) {
-                    var stampay = tetramino.ypos + righe * cella;
-                    var stampax = tetramino.xpos + colonne * cella;
-                    MatriceCampo[stampay / cella][stampax / cella] = 1;
-                }
-            }
-            
-        }
-        console.log(MatriceCampo);
-    }
-});
+var tetramino = new Tetramino();
