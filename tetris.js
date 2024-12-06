@@ -42,6 +42,28 @@ const TetraminoL = {
     colore : '#1abc9c'
 }
 
+// const TetraminoL = {
+//     forma : [
+//         [0, 0, 0, 0],
+//         [0, 0, 0, 0],
+//         [1, 1, 1, 1],
+//         [0, 0, 0, 1]
+//     ],
+
+//     colore : '#1abc9c'
+// }
+
+// const TetraminoL = {
+//     forma : [
+//         [1, 1, 1, 1],
+//         [0, 0, 0, 1],
+//         [0, 0, 0, 0],
+//         [0, 0, 0, 0]
+//     ],
+
+//     colore : '#1abc9c'
+// }
+
 const TetraminoJ = {
     forma : [
         [0, 0, 0, 1],
@@ -157,8 +179,8 @@ class Tetramino {
     constructor() {
         this.width = cella;
         this.height = cella;
-        this.forma = formetetramini[valorecasuale];
-        this.colore = coloretramini[valorecasuale];
+        this.forma = formetetramini[1];
+        this.colore = coloretramini[1];
         const larghezzaReale = this.calcolaLarghezza();
         this.xpos = (MatriceCampo[0].length / 2 - Math.floor(larghezzaReale / 2)) * cella;
         this.ypos = 0;
@@ -186,14 +208,38 @@ class Tetramino {
         return trasposta.reduce((larghezza, colonna) => larghezza + (colonna.some(cell => cell === 1) ? 1 : 0), 0);
     }
 
+    // movimentoVert() {
+    //     // Sposta il tetramino verso il basso
+    //     const altezzaReale = this.calcolaAltezza();
+    //     if (this.ypos + altezzaReale * cella < TetrisArea.height) {
+    //         this.ypos += cella;
+    //     }
+    //     //logica se sotto c'è uno
+    //     //MatriceCampo[(this.ypos / cella) + altezzaReale][this.xpos / cella] === 0
+    // }
+
+    calcolaAltezzacolonna(){
+        var arrayAltVolonne = [];
+        for (let righe = 0; righe < this.forma.length; righe++) {
+            //console.log('riga ' + righe);
+            for (let colonne = 0; colonne < this.forma[righe].length; colonne++) {
+                //console.log(colonne);
+                if (this.forma[righe][colonne] === 1) {
+                    var altezzaC = 0;
+                    altezzaC = righe + 1;
+                }
+            }
+            arrayAltVolonne.push(altezzaC);
+        }
+        console.log(arrayAltVolonne);
+    }
+
     movimentoVert() {
         // Sposta il tetramino verso il basso
         const altezzaReale = this.calcolaAltezza();
-        if (this.ypos + altezzaReale * cella < TetrisArea.height) {
+        if (this.ypos + altezzaReale * cella < TetrisArea.height && MatriceCampo[(this.ypos / cella) + altezzaReale][this.xpos / cella] === 0) {
             this.ypos += cella;
         }
-        //logica se sotto c'è uno
-        //MatriceCampo[(this.ypos / cella) + altezzaReale][this.xpos / cella] === 0
     }
 
     movimentoOrizzontale(direzione) {
@@ -243,6 +289,8 @@ function cadutaAutomatica() {
 requestAnimationFrame(cadutaAutomatica);
 
 const tetramino = new Tetramino();
+
+tetramino.calcolaAltezzacolonna();
 
 
 document.addEventListener("keydown", (event) => {
