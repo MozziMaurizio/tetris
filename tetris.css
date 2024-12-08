@@ -7,8 +7,7 @@ body{
     height: 100vh; */
 }
 
-/* #Areadigioco{
-    width: 400px;
-    height: 800px;
-    background-color: aqua;
-} */
+canvas {
+    background-color: black;
+    box-shadow: 14px 14px 0 0 #fff;
+}
