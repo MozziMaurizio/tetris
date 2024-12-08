@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let timerId;
 
-    const cella = 30;
+    const cella = 35;
     const righe = canvas.height / cella;
     const colonne = canvas.width / cella;
 
@@ -51,13 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //colori tetramini
     const colori = {
-        O: "yellow",
-        I: "blue",
-        S: "red",
-        Z: "green",
-        L: "orange",
-        J: "cyan",
-        T: "purple",
+        O: "#e7f530",
+        I: "#2980B9",
+        S: "#C0392B",
+        Z: "#16A085",
+        L: "#F39C12",
+        J: "#94c0dc",
+        T: "#8E44AD",
     }
 
 
@@ -139,12 +139,34 @@ document.addEventListener("DOMContentLoaded", () => {
                     const nuovaX = x + spostamentoX;
                     const nuovaY = y + spostamentoY;
                     // controlla : collisione lato sx, collisione lato dx, collisione fondo, collisione con blocco diverso da 0
-                    return (nuovaX < 0 || nuovaX >= colonne || nuovaY >= righe || griglia[nuovaX][nuovaY])
+                    //return la ferma appena una di queste condizioni è vera
+                    if (nuovaX < 0 || nuovaX >= colonne || nuovaY >= righe || griglia[nuovaY][nuovaX] ) {
+                    
+                        return true;
+                    }
                 }
                 return false;
             })
         })
-    }
+    };
+
+    // function rilevacCollisioneTetramini(tetramino, spostamentoX, spostamentoY) {
+    //     tetramino.forEach((riga, y) => {
+    //         riga.forEach((valore, x) => {
+    //             if(valore) {
+    //                 const prossimaX = x + spostamentoX;
+    //                 const prossimaY = y + spostamentoY;
+    //                 console.log('prossimX =', prossimaX, 'prossimaY =', prossimaY, griglia[prossimaY][prossimaX])
+    //                 if (griglia[y + tetraminoCorrente.y][x + tetraminoCorrente.x] !== 0) {
+    //                     console.log('rilevata collisione')
+    //                     return true;
+    //                 } 
+    //             }
+    //             return false;
+    //         })
+    //     })
+
+    // };
 
     function muoviDx(){
         if(!rilevaCollisione(tetraminoCorrente.forma, tetraminoCorrente.x + 1, tetraminoCorrente.y)) {
@@ -157,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
     function muoviGiù(){
-        if(!rilevaCollisione(tetraminoCorrente.forma, tetraminoCorrente.x, tetraminoCorrente.y + 1)) {
+        if(!rilevaCollisione(tetraminoCorrente.forma, tetraminoCorrente.x, tetraminoCorrente.y + 1) ) {
             tetraminoCorrente.y++;
         } else {
             fusioneTetramino();
@@ -166,6 +188,8 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     function ruota(){};
 
+   
+
     function fusioneTetramino() {
         tetraminoCorrente.forma.forEach((riga, y) => {
             riga.forEach((valore, x) => {
@@ -173,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if(valore) {
                     console.log(colori[tetraminoCorrente.letteraTetramino])
                     //assegna alla cella corrispondente della griglia = colore del tetramino (purple, green, ecc)
-                    griglia[y + tetraminoCorrente.y][x + tetraminoCorrente.x] = colori[tetraminoCorrente.letteraTetramino];
+                    griglia[y + tetraminoCorrente.y][x + tetraminoCorrente.x] = colori[tetraminoCorrente.letteraTetramino]; //???
                 }
             })
         })
