@@ -19,6 +19,8 @@ TetrisArea.style.position = 'absolute';
 TetrisArea.style.top = '50%';
 TetrisArea.style.left = '50%';
 TetrisArea.style.transform = 'translate(-50%, -50%)';
+var noblock = true
+
 
 /////////////////////////////////////////////////////////MATRICI////////////////////////////////////////////////////////    
 const TetraminoT = {
@@ -120,7 +122,7 @@ var MatriceCampo = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -144,7 +146,6 @@ var MatriceCampo = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    //[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
 //Array contenenti tetramini e colori
@@ -167,6 +168,12 @@ function disegnaGriglia() {
             const x = colonne * cella;
             const y = righe * cella;
             //stile bordo e bordo
+
+            if (MatriceCampo[righe][colonne] !== 0) {
+                ELtetris.fillStyle = MatriceCampo[righe][colonne]; // Usa il colore memorizzato
+                ELtetris.fillRect(x, y, cella, cella);
+            }
+
             ELtetris.lineWidth = 2;
             ELtetris.strokeStyle='black';
             ELtetris.strokeRect(x, y, cella, cella);
@@ -174,13 +181,13 @@ function disegnaGriglia() {
     }
 }
 
-//////////////////////////////////////////////////COSTRUTTORI//////////////////////////////////////////////////////////////7
+//////////////////////////////////////////////////COSTRUTTORI//////////////////////////////////////////////////////////////
 class Tetramino {
     constructor() {
         this.width = cella;
         this.height = cella;
-        this.forma = formetetramini[1];
-        this.colore = coloretramini[1];
+        this.forma = formetetramini[valorecasuale];
+        this.colore = coloretramini[valorecasuale];
         const larghezzaReale = this.calcolaLarghezza();
         this.xpos = (MatriceCampo[0].length / 2 - Math.floor(larghezzaReale / 2)) * cella;
         this.ypos = 0;
@@ -208,28 +215,20 @@ class Tetramino {
         return trasposta.reduce((larghezza, colonna) => larghezza + (colonna.some(cell => cell === 1) ? 1 : 0), 0);
     }
 
-    // movimentoVert() {
-    //     // Sposta il tetramino verso il basso
-    //     const altezzaReale = this.calcolaAltezza();
-    //     if (this.ypos + altezzaReale * cella < TetrisArea.height) {
-    //         this.ypos += cella;
-    //     }
-    //     //logica se sotto c'è uno
-    //     //MatriceCampo[(this.ypos / cella) + altezzaReale][this.xpos / cella] === 0
-    // }
-
     bloccaTetramino(){
         for (let righe = 0; righe < tetramino.forma.length; righe++) {
             for (let colonne = 0; colonne < tetramino.forma[righe].length; colonne++) {
                 if (tetramino.forma[righe][colonne] === 1) {
                     var stampay = tetramino.ypos + righe * cella;
                     var stampax = tetramino.xpos + colonne * cella;
-                    MatriceCampo[stampay / cella][stampax / cella] = 1;
+                    MatriceCampo[stampay / cella][stampax / cella] = this.colore;
                 }
             }
         }
         console.log(MatriceCampo);
+        valorecasuale = Math.round(Math.random() * 6);
         tetramino = new Tetramino();
+        noblock = true;
     }
 
     calcolaAltezzaColonna() {
@@ -260,13 +259,17 @@ class Tetramino {
     
             // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
             if (Basetetramino > MatriceCampo.length || MatriceCampo[Basetetramino]?.[XinMatrice] !== 0) {
-                this.bloccaTetramino(); // Blocca il tetramino nella sua posizione attuale
-                return;
+                noblock = false;
+                //return;
             }
         }
     
         // Nessuna collisione, sposta il tetramino verso il basso
-        this.ypos += cella;
+        if(noblock){
+            this.ypos += cella;
+        } else {
+            this.bloccaTetramino(); // Blocca il tetramino nella sua posizione attuale
+        }
     }
 
     movimentoOrizzontale(direzione) {
@@ -295,5 +298,24 @@ document.addEventListener("keydown", (event) => {
     }
     aggiorna();
 });
+
+//Prende il tempo attuale in ms
+let ultimoAggiornamento = Date.now();
+//intervallo di tempo
+const tempoCaduta = 1000;
+
+function cadutaAutomatica() {
+    //Prende il tempo attuale in ms e incrementa con la richiesta dei frame
+    const tempoOra = Date.now();
+    //Quando la differenza tra il tempo attuale e l'ultimo aggiornamento è maggiore o uguale al'intervallo aggiorna la posizione y e l'ultimo aggiornamento
+    if (tempoOra - ultimoAggiornamento >= tempoCaduta) {
+        tetramino.movimentoVert();
+        ultimoAggiornamento = tempoOra;
+    }
+    aggiorna();
+    requestAnimationFrame(cadutaAutomatica);
+}
+
+requestAnimationFrame(cadutaAutomatica);
 
 var tetramino = new Tetramino();
