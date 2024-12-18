@@ -235,7 +235,7 @@ class Tetramino {
         const arrayAltColonne = [];
     
         for (let colonna = 0; colonna < this.forma[0].length; colonna++) {
-            let altezzaC = -1;
+            let altezzaC = 0;
     
             for (let riga = this.forma.length - 1; riga >= 0; riga--) { 
                 if (this.forma[riga][colonna] === 1) {
@@ -247,6 +247,35 @@ class Tetramino {
         }
     
         return arrayAltColonne;
+    }
+
+    calcolaLarghezzaRiga(){
+        const arrayLRigheMinore = [];
+        const arrayLRigheMaggiore = [];
+
+        for (let righe = 0; righe < this.forma.length; righe++) {
+            let lunghezzaRMinore = 0;
+            let lunghezzaRMaggiore = 0;
+
+            for (let colonne = 0; colonne < this.forma[righe].length; colonne++){
+                if (this.forma[righe][colonne] === 1){
+                    lunghezzaRMinore = colonne - 1;
+
+                    for(let i = (colonne + 1); i < this.forma[righe].length; i++){
+                        if (this.forma[righe][i] !== 1){
+                            
+                            lunghezzaRMaggiore = colonne + 1;
+                            break;
+                        }
+                        console.log(i);
+                    }
+                    break;
+                }
+            }
+            arrayLRigheMinore.push(lunghezzaRMinore);
+            arrayLRigheMaggiore.push(lunghezzaRMaggiore);
+        }
+        console.log(arrayLRigheMinore, arrayLRigheMaggiore);
     }
 
     movimentoVert() {
@@ -319,3 +348,4 @@ function cadutaAutomatica() {
 requestAnimationFrame(cadutaAutomatica);
 
 var tetramino = new Tetramino();
+tetramino.calcolaLarghezzaRiga();
