@@ -61,16 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    //se premuto tasto space inizia il gioco
-    window.addEventListener("keydown", (e) => {
-        if((e.key == " " || e.code == "Space" || e.keyCode == "32") && !giocoInCorso) {
-            giocoInCorso = true;
-            //crea nuovo tetramino
-            nuovoTetramino();
-            //disegna tetramino
-            timerId = setInterval(loop, 500);
-        }
-    });
+   
 
     function nuovoTetramino() {
         //si recupera tutti i tetramini
@@ -150,34 +141,20 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     };
 
-    // function rilevacCollisioneTetramini(tetramino, spostamentoX, spostamentoY) {
-    //     tetramino.forEach((riga, y) => {
-    //         riga.forEach((valore, x) => {
-    //             if(valore) {
-    //                 const prossimaX = x + spostamentoX;
-    //                 const prossimaY = y + spostamentoY;
-    //                 console.log('prossimX =', prossimaX, 'prossimaY =', prossimaY, griglia[prossimaY][prossimaX])
-    //                 if (griglia[y + tetraminoCorrente.y][x + tetraminoCorrente.x] !== 0) {
-    //                     console.log('rilevata collisione')
-    //                     return true;
-    //                 } 
-    //             }
-    //             return false;
-    //         })
-    //     })
-
-    // };
+    
 
     function muoviDx(){
         if(!rilevaCollisione(tetraminoCorrente.forma, tetraminoCorrente.x + 1, tetraminoCorrente.y)) {
              tetraminoCorrente.x++;
         }
     };
+
     function muoviSx(){
         if(!rilevaCollisione(tetraminoCorrente.forma, tetraminoCorrente.x - 1, tetraminoCorrente.y)) {
             tetraminoCorrente.x--;
         }
     };
+
     function muoviGiù(){
         if(!rilevaCollisione(tetraminoCorrente.forma, tetraminoCorrente.x, tetraminoCorrente.y + 1) ) {
             tetraminoCorrente.y++;
@@ -186,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
             nuovoTetramino();
         }
     };
+
     function ruota(){};
 
    
@@ -199,8 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     //assegna alla cella corrispondente della griglia = colore del tetramino (purple, green, ecc)
                     griglia[y + tetraminoCorrente.y][x + tetraminoCorrente.x] = colori[tetraminoCorrente.letteraTetramino]; //???
                 }
-            })
-        })
+            });
+        });
     };
 
     
@@ -217,5 +195,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 ruota();
             }
         }
-    })
+    });
+
+     //se premuto tasto space inizia il gioco
+     window.addEventListener("keydown", (e) => {
+        if((e.key == " " || e.code == "Space" || e.keyCode == "32") && !giocoInCorso) {
+            giocoInCorso = true;
+            //crea nuovo tetramino
+            nuovoTetramino();
+            //disegna tetramino
+            timerId = setInterval(loop, 500);
+        }
+    });
 });
+
+
+
+// function rilevacCollisioneTetramini(tetramino, spostamentoX, spostamentoY) {
+    //     tetramino.forEach((riga, y) => {
+    //         riga.forEach((valore, x) => {
+    //             if(valore) {
+    //                 const prossimaX = x + spostamentoX;
+    //                 const prossimaY = y + spostamentoY;
+    //                 console.log('prossimX =', prossimaX, 'prossimaY =', prossimaY, griglia[prossimaY][prossimaX])
+    //                 if (griglia[y + tetraminoCorrente.y][x + tetraminoCorrente.x] !== 0) {
+    //                     console.log('rilevata collisione')
+    //                     return true;
+    //                 } 
+    //             }
+    //             return false;
+    //         })
+    //     })
+
+    // };
