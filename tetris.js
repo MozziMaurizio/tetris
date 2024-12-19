@@ -318,7 +318,9 @@ class Tetramino {
         const indiciInizio = lunghezzaRighe[0];
         const inidiciFine = lunghezzaRighe[1];
         console.log(indiciInizio, inidiciFine);
-        // for (let i = 0; i < lunghezzaRighe)
+        for (let i = 0; i < indiciInizio.length; i++) {
+            
+        }
     }
 }
 
