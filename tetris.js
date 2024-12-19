@@ -207,10 +207,13 @@ class Tetramino {
     }
 
     calcolaAltezza() {
+        //reduce itera su ogni riga di forma
+        //se la riga contiene almeno un 1 incrementa altezza
         return this.forma.reduce((altezza, riga) => altezza + (riga.some(cell => cell === 1) ? 1 : 0), 0);
     }
 
     calcolaLarghezza() {
+        //Questa operazione serve a convertire le righe in colonne, per poter analizzare ogni colonna come se fosse una riga.
         const trasposta = this.forma[0].map((_, colIndex) => this.forma.map(riga => riga[colIndex]));
         return trasposta.reduce((larghezza, colonna) => larghezza + (colonna.some(cell => cell === 1) ? 1 : 0), 0);
     }
@@ -231,12 +234,16 @@ class Tetramino {
         noblock = true;
     }
 
+    //calcola l'altezza occupata di ciascuna colonna
     calcolaAltezzaColonna() {
+        //array per memorizzare altezza di ogni colonna 
         const arrayAltColonne = [];
     
         for (let colonna = 0; colonna < this.forma[0].length; colonna++) {
             let altezzaC = 0;
     
+            //All'interno di ogni colonna, si scorre dall'ultima riga verso la prima
+            //Si scorre dall'ultima riga verso la prima (dal basso verso l'alto) per ottimizzare il calcolo dell'altezza della colonna, fermandosi non appena si trova la prima cella occupata (1).
             for (let riga = this.forma.length - 1; riga >= 0; riga--) { 
                 if (this.forma[riga][colonna] === 1) {
                     altezzaC = riga + 1;
@@ -249,42 +256,40 @@ class Tetramino {
         return arrayAltColonne;
     }
 
-    calcolaLarghezzaRiga(){
-        const arrayLRigheMinore = [];
-        const arrayLRigheMaggiore = [];
+    calcolaLunghezzaRiga(){ //analizza ogni riga tetramino
+        const indiciInizio = [];
+        const indiciFine = [];
+        const inidiceInizioFine = [];
 
         for (let righe = 0; righe < this.forma.length; righe++) {
-            let lunghezzaRMinore = 0;
-            let lunghezzaRMaggiore = 0;
+            let indiceInizioArray = -1;
+            let indiceFineArray = -1;
 
             for (let colonne = 0; colonne < this.forma[righe].length; colonne++){
                 if (this.forma[righe][colonne] === 1){
-                    lunghezzaRMinore = colonne - 1;
-
-                    for(let i = (colonne + 1); i < this.forma[righe].length; i++){
-                        if (this.forma[righe][i] !== 1){
-                            
-                            lunghezzaRMaggiore = colonne + 1;
-                            break;
-                        }
-                        console.log(i);
+                    if ( indiceInizioArray === -1) {
+                        indiceInizioArray = colonne;
                     }
-                    break;
+                    indiceFineArray = colonne;
                 }
             }
-            arrayLRigheMinore.push(lunghezzaRMinore);
-            arrayLRigheMaggiore.push(lunghezzaRMaggiore);
+            indiciInizio.push(indiceInizioArray);
+            indiciFine.push(indiceFineArray);
         }
-        console.log(arrayLRigheMinore, arrayLRigheMaggiore);
+        console.log(indiciInizio, indiciFine);
+        return [indiciInizio, indiciFine]
     }
 
+
+
     movimentoVert() {
-        const altezzeColonne = this.calcolaAltezzaColonna();
-        const YinMatrice = this.ypos / cella;
+        const altezzeColonne = this.calcolaAltezzaColonna(); // Ottiene le altezze delle colonne della forma corrente
+        const YinMatrice = this.ypos / cella; //pos verticale
 
         for (let colonna = 0; colonna < altezzeColonne.length; colonna++) {
+             // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
             const Basetetramino = YinMatrice + altezzeColonne[colonna];
-            const XinMatrice = this.xpos / cella + colonna;
+            const XinMatrice = this.xpos / cella + colonna; //pos orizz
     
             // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
             if (Basetetramino > MatriceCampo.length || MatriceCampo[Basetetramino]?.[XinMatrice] !== 0) {
@@ -308,6 +313,12 @@ class Tetramino {
         if (nuovaXpos >= 0 && nuovaXpos + larghezzaReale * cella <= TetrisArea.width) {
             this.xpos = nuovaXpos;
         }
+
+        const lunghezzaRighe = this.calcolaLunghezzaRiga();
+        const indiciInizio = lunghezzaRighe[0];
+        const inidiciFine = lunghezzaRighe[1];
+        console.log(indiciInizio, inidiciFine);
+        // for (let i = 0; i < lunghezzaRighe)
     }
 }
 
@@ -348,4 +359,4 @@ function cadutaAutomatica() {
 requestAnimationFrame(cadutaAutomatica);
 
 var tetramino = new Tetramino();
-tetramino.calcolaLarghezzaRiga();
+tetramino.calcolaLunghezzaRiga();
