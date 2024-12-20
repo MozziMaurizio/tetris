@@ -209,6 +209,19 @@ class Tetramino {
 
     }
 
+    ////////////////////METODO PER RUOTARE////////////////////////////////
+
+    ruota() { //trasponiamo righe in colonne e invertiamo ordine
+
+        console.log(this.forma[0])
+        //                       |itero su righe tetramino|          |in base all'indice prende colonna corrispondente per ogni riga e poi la inverto| 
+        const tetraminoRuotato = this.forma.map((valore, indice) => this.forma.map(riga => riga[indice]).reverse());
+        this.forma = tetraminoRuotato
+        console.log(tetraminoRuotato);
+
+    }
+
+
     ////////////////////METODO PER DISEGNARE TETRAMINO////////////////////////////////
 
     disegna() {
@@ -422,6 +435,8 @@ document.addEventListener("keydown", (event) => {
 
         tetramino.movimentoVert();
 
+    } else if (event.key === "ArrowUp") {
+        tetramino.ruota();
     }
     aggiorna();
 
