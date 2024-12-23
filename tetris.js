@@ -14,7 +14,7 @@ var yposinizialegriglia = 0;
 var valoreCasuale = Math.round(Math.random() * 6);
 
 //Stile e posizionamento dell'area di gioco
-TetrisArea.style.background = 'red';
+// TetrisArea.style.background = 'red';
 TetrisArea.style.position = 'absolute';
 TetrisArea.style.top = '50%';
 TetrisArea.style.left = '50%';
@@ -157,6 +157,7 @@ function disegnaGriglia() {
 
                 ELtetris.fillStyle = MatriceCampo[righe][colonne]; // Usa il colore memorizzato
                 ELtetris.fillRect(x, y, cella, cella);
+                ELtetris.style = tetramino.colore;
 
             }
 
@@ -256,6 +257,7 @@ class Tetramino {
     //////////////////////////////////METODO PER BLOCCARE TETRAMINO//////////////////////////////////////////////////////
 
     bloccaTetramino(){
+        console.log(MatriceCampo)
 
         for (let righe = 0; righe < tetramino.forma.length; righe++) {
 
@@ -265,7 +267,7 @@ class Tetramino {
 
                     var stampaY = tetramino.ypos + righe * cella;
                     var stampaX = tetramino.xpos + colonne * cella;
-                    MatriceCampo[stampaY / cella][stampaX / cella] = this.colore;
+                    MatriceCampo[stampaY / cella][stampaX / cella] = 1;
 
                 }
             }
@@ -361,7 +363,7 @@ class Tetramino {
             const BaseTetramino = YinMatrice + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
             const XinMatrice = this.xpos / cella + colonna;   //pos orizz
 
-            if (BaseTetramino > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] !== 0) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
+            if (BaseTetramino + 1 > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] === 1) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
 
                 noblock = false;
 
@@ -391,7 +393,6 @@ class Tetramino {
         const YinMatrice = this.ypos / cella;
 
         for (let righe = 0; righe < indiciInizio.length; righe++) {
-
             const latoTetraminoMinore = nuovaXpos / cella + indiciInizio[righe];
             const latoTetraminoMaggiore = nuovaXpos / cella + inidiciFine[righe];
 
