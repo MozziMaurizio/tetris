@@ -43,10 +43,9 @@ const TetraminoT = {
 
 const TetraminoL = {
     forma : [
-        [1, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
+        [1, 0, 0],
+        [1, 1, 1],
+        [0, 0, 0]
     ],
 
     colore : '#1abc9c'
@@ -54,10 +53,9 @@ const TetraminoL = {
 
 const TetraminoJ = {
     forma : [
-        [0, 0, 0, 1],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
+        [0, 0, 1],
+        [1, 1, 1],
+        [0, 0, 0]
     ],
 
     colore : '#2ecc71'
@@ -65,10 +63,10 @@ const TetraminoJ = {
 
 const TetraminoI = {
     forma : [
-        [1, 0, 0, 0],
-        [1, 0, 0, 0],
-        [1, 0, 0, 0],
-        [1, 0, 0, 0]
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0]
     ],
 
     colore : '#e74c3c'
@@ -214,10 +212,10 @@ class Tetramino {
 
     ruota() { //trasponiamo righe in colonne e invertiamo ordine
 
-        console.log(this.forma[0])
+        console.log(this.forma);
         //                       |itero su righe tetramino|          |in base all'indice prende colonna corrispondente per ogni riga e poi la inverto| 
         const tetraminoRuotato = this.forma.map((valore, indice) => this.forma.map(riga => riga[indice]).reverse());
-        this.forma = tetraminoRuotato
+        this.forma = tetraminoRuotato;
         console.log(tetraminoRuotato);
 
     }
@@ -285,17 +283,20 @@ class Tetramino {
 
     calcolaAltezzaColonna() {  //calcola l'altezza occupata di ciascuna colonna
 
-        const arrayAltColonne = [];  //array per memorizzare altezza di ogni colonna 
+        const arrayAltColonne = [];  //array per memorizzare altezza di ogni colonna
+        const arraypolloalrosto = [];
 
         for (let colonna = 0; colonna < this.forma[0].length; colonna++) {
 
             let altezzaCol = 0;
+            let polloalrosto = 0;
 
             for (let riga = this.forma.length - 1; riga >= 0; riga--) {   //All'interno di ogni colonna Si scorre dall'ultima riga verso la prima (dal basso verso l'alto) per ottimizzare il calcolo dell'altezza della colonna, fermandosi non appena si trova la prima cella occupata (1).
 
                 if (this.forma[riga][colonna] === 1) {
 
                     altezzaCol = riga + 1;
+                    polloalrosto = colonna;
                     break;
 
                 }
@@ -304,10 +305,13 @@ class Tetramino {
             if (altezzaCol !== 0){
 
                 arrayAltColonne.push(altezzaCol);
+                arraypolloalrosto.push(polloalrosto);
 
             }
+
         }
-        return arrayAltColonne;
+        console.log(arraypolloalrosto);
+        return [arrayAltColonne, arraypolloalrosto];
     }
 
     ////////////////////////////////METODO PER CALCOLARE LUNGHEZZA RIGHE////////////////////////////////////////////////
@@ -347,7 +351,7 @@ class Tetramino {
             }
         }
 
-        return [indiciInizio, indiciFine]
+        return [indiciInizio, indiciFine];
 
     }
 
@@ -355,15 +359,18 @@ class Tetramino {
 
     movimentoVert() {
 
-        const altezzeColonne = this.calcolaAltezzaColonna();   // Ottiene le altezze delle colonne della forma corrente
+        const metodoaltezza = this.calcolaAltezzaColonna();
+        const altezzeColonne = metodoaltezza[0];   // Ottiene le altezze delle colonne della forma corrente
+        const polloalrosto = metodoaltezza[1];
         const YinMatrice = this.ypos / cella;   //pos verticale
 
         for (let colonna = 0; colonna < altezzeColonne.length; colonna++) {
 
             const BaseTetramino = YinMatrice + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
-            const XinMatrice = this.xpos / cella + colonna;   //pos orizz
+            const XinMatrice = this.xpos / cella + polloalrosto[colonna];   //pos orizz
+            console.log(XinMatrice);
 
-            if (BaseTetramino + 1 > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] === 1) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
+            if (BaseTetramino > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] !== 0) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
 
                 noblock = false;
 
@@ -421,6 +428,7 @@ class Tetramino {
 }
 
 //////////////////////////////////LISTENER SUI TASTI FRECCIA///////////////////////////////////////////////////////////////
+var calmate = true;
 
 document.addEventListener("keydown", (event) => {
 
@@ -436,9 +444,19 @@ document.addEventListener("keydown", (event) => {
 
         tetramino.movimentoVert();
 
-    } else if (event.key === "ArrowUp") {
-        tetramino.ruota();
+    } else if (calmate) {
+        if (event.key === "ArrowUp") {
+            calmate = false;
+            tetramino.ruota();
+        }
     }
+    aggiorna();
+
+});
+
+document.addEventListener("keyup", () => {
+
+    calmate = true;
     aggiorna();
 
 });
