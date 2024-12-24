@@ -13,6 +13,8 @@ var yposinizialegriglia = 0;
 
 var valoreCasuale = Math.round(Math.random() * 6);
 
+var calmate = true;
+
 //Stile e posizionamento dell'area di gioco
 // TetrisArea.style.background = 'red';
 TetrisArea.style.position = 'absolute';
@@ -212,11 +214,42 @@ class Tetramino {
 
     ruota() { //trasponiamo righe in colonne e invertiamo ordine
 
-        console.log(this.forma);
         //                       |itero su righe tetramino|          |in base all'indice prende colonna corrispondente per ogni riga e poi la inverto| 
         const tetraminoRuotato = this.forma.map((valore, indice) => this.forma.map(riga => riga[indice]).reverse());
         this.forma = tetraminoRuotato;
-        console.log(tetraminoRuotato);
+
+        let offsetX = 0; //valore che memorizzerà di quanto va spostato il tetramino
+
+        for (let riga = 0; riga < tetraminoRuotato.length; riga++) {
+
+            for (let col = 0; col < tetraminoRuotato[riga].length; col++) {
+
+                if (tetraminoRuotato[riga][col] !== 0) { // Blocchetto presente
+
+                    const x = this.xpos + col;
+
+                    if (x < 0) {
+                        //esce a sx
+                        console.log('esce a sx')
+
+                    } else if (x >= (MatriceCampo[0].length + 1) * 30) {
+                        // Esce a destra
+                        console.log('esce a dx')
+
+                    }
+
+                    console.log('x', x)
+                    console.log('matricecampo[0].length', MatriceCampo[0].length)
+                    console.log('(MatriceCampo[0].length + 1) * 30', (MatriceCampo[0].length) * 30)
+                }
+                
+            }
+          
+        }
+
+    // Applica l'offset
+    // this.xpos += offsetX;
+
 
     }
 
@@ -255,7 +288,6 @@ class Tetramino {
     //////////////////////////////////METODO PER BLOCCARE TETRAMINO//////////////////////////////////////////////////////
 
     bloccaTetramino(){
-        console.log(MatriceCampo)
 
         for (let righe = 0; righe < tetramino.forma.length; righe++) {
 
@@ -271,7 +303,6 @@ class Tetramino {
             }
         }
 
-        console.log(MatriceCampo);
         valoreCasuale = Math.round(Math.random() * 6);
         tetramino = new Tetramino();
         noblock = true;
@@ -310,7 +341,6 @@ class Tetramino {
             }
 
         }
-        console.log(arraypolloalrosto);
         return [arrayAltColonne, arraypolloalrosto];
     }
 
@@ -368,7 +398,6 @@ class Tetramino {
 
             const BaseTetramino = YinMatrice + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
             const XinMatrice = this.xpos / cella + polloalrosto[colonna];   //pos orizz
-            console.log(XinMatrice);
 
             if (BaseTetramino > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] !== 0) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
 
@@ -428,7 +457,6 @@ class Tetramino {
 }
 
 //////////////////////////////////LISTENER SUI TASTI FRECCIA///////////////////////////////////////////////////////////////
-var calmate = true;
 
 document.addEventListener("keydown", (event) => {
 
@@ -445,11 +473,15 @@ document.addEventListener("keydown", (event) => {
         tetramino.movimentoVert();
 
     } else if (calmate) {
+
         if (event.key === "ArrowUp") {
+
             calmate = false;
             tetramino.ruota();
+
         }
     }
+
     aggiorna();
 
 });
