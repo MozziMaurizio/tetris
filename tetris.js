@@ -11,7 +11,8 @@ var cella = 30;
 
 var yposinizialegriglia = 0;
 
-var valoreCasuale = Math.round(Math.random() * 6);
+//var valoreCasuale = Math.round(Math.random() * 6);
+var valoreCasuale = 2;
 
 //Stile e posizionamento dell'area di gioco
 // TetrisArea.style.background = 'red';
@@ -212,11 +213,31 @@ class Tetramino {
 
     ruota() { //trasponiamo righe in colonne e invertiamo ordine
 
-        console.log(this.forma);
+        const lunghezzaRighe = this.calcolaLunghezzaRiga();
+        const indiciInizio = lunghezzaRighe[0];
+        const inidiciFine = lunghezzaRighe[1];
+        console.log('INIZIO ' + indiciInizio);
+        console.log('FINE ' + inidiciFine);
+        //console.log(this.forma);
         //                       |itero su righe tetramino|          |in base all'indice prende colonna corrispondente per ogni riga e poi la inverto| 
         const tetraminoRuotato = this.forma.map((valore, indice) => this.forma.map(riga => riga[indice]).reverse());
         this.forma = tetraminoRuotato;
-        console.log(tetraminoRuotato);
+        //console.log(tetraminoRuotato);
+        
+        for (let righe = 0; righe < this.forma.length; righe++) {
+
+            for (let colonne = 0; colonne < this.forma[righe].length; colonne++){
+
+                    if (this.forma[righe][colonne] === 1) {
+
+                        var PosXrotazione = this.xpos / cella;
+                        //console.log(PosXrotazione);
+                        break;
+
+                    }
+
+                }
+            }
 
     }
 
@@ -255,7 +276,7 @@ class Tetramino {
     //////////////////////////////////METODO PER BLOCCARE TETRAMINO//////////////////////////////////////////////////////
 
     bloccaTetramino(){
-        console.log(MatriceCampo)
+        //console.log(MatriceCampo)
 
         for (let righe = 0; righe < tetramino.forma.length; righe++) {
 
@@ -271,7 +292,7 @@ class Tetramino {
             }
         }
 
-        console.log(MatriceCampo);
+        //console.log(MatriceCampo);
         valoreCasuale = Math.round(Math.random() * 6);
         tetramino = new Tetramino();
         noblock = true;
@@ -310,7 +331,7 @@ class Tetramino {
             }
 
         }
-        console.log(arraypolloalrosto);
+        //console.log(arraypolloalrosto);
         return [arrayAltColonne, arraypolloalrosto];
     }
 
@@ -368,7 +389,7 @@ class Tetramino {
 
             const BaseTetramino = YinMatrice + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
             const XinMatrice = this.xpos / cella + polloalrosto[colonna];   //pos orizz
-            console.log(XinMatrice);
+            //console.log(XinMatrice);
 
             if (BaseTetramino > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] !== 0) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
 
