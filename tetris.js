@@ -155,7 +155,6 @@ function disegnaGriglia() {
 
                 ELtetris.fillStyle = MatriceCampo[righe][colonne]; // Usa il colore memorizzato
                 ELtetris.fillRect(x, y, cella, cella);
-                ELtetris.style = tetramino.colore;
 
             }
 
@@ -303,7 +302,7 @@ class Tetramino {
 
                     var stampaY = tetramino.ypos + righe * cella;
                     var stampaX = tetramino.xpos + colonne * cella;
-                    MatriceCampo[stampaY / cella][stampaX / cella] = 1;
+                    MatriceCampo[stampaY / cella][stampaX / cella] = this.colore; // Assegna il colore del tetramino alla matrice campo
 
                 }
             }
@@ -471,18 +470,18 @@ var calmate = true;
 document.addEventListener("keydown", (event) => {
 
     if (event.key === "ArrowLeft") {
-
         tetramino.movimentoOrizzontale(-1);
-
-    } else if (event.key === "ArrowRight") {
-
+    }
+    
+    if (event.key === "ArrowRight") {
         tetramino.movimentoOrizzontale(1);
-
-    } else if (event.key === "ArrowDown") {
-
+    }
+    
+    if (event.key === "ArrowDown") {
         tetramino.movimentoVert();
-
-    } else if (calmate) {
+    }
+    
+    if (calmate) {
         if (event.key === "ArrowUp") {
             calmate = false;
             tetramino.ruota();
