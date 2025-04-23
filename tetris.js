@@ -11,8 +11,7 @@ var cella = 30;
 
 var yposinizialegriglia = 0;
 
-//var valoreCasuale = Math.round(Math.random() * 6);
-var valoreCasuale = 2;
+var valoreCasuale = Math.round(Math.random() * 6);
 
 //Stile e posizionamento dell'area di gioco
 // TetrisArea.style.background = 'red';
@@ -211,34 +210,52 @@ class Tetramino {
 
     ////////////////////METODO PER RUOTARE////////////////////////////////
 
-    ruota() { //trasponiamo righe in colonne e invertiamo ordine
+    ruota() {
+        const tetraminoRuotato = this.forma[0].map((_, colIndex) =>
+            this.forma.map(riga => riga[colIndex]).reverse()
+        );
+    
+        const tentativi = [
+            { dx: 0, dy: 0 },   // posizione attuale
+            { dx: -1, dy: 0 },  // prova a sinistra
+            { dx: 1, dy: 0 },   // prova a destra
+            { dx: 0, dy: -1 },  // prova verso l'alto
+            { dx: -2, dy: 0 },  // ancora più a sinistra
+            { dx: 2, dy: 0 }    // ancora più a destra
+        ];
+    
+        for (const tentativo of tentativi) {
+            if (this.rotazioneValida(tetraminoRuotato, tentativo.dx, tentativo.dy)) {
+                this.forma = tetraminoRuotato;
+                this.xpos += tentativo.dx * cella;
+                this.ypos += tentativo.dy * cella;
+                return;
+            }
+        }
+    
+        // se arriva qui, nessun tentativo è riuscito → niente rotazione
+    }
 
-        const lunghezzaRighe = this.calcolaLunghezzaRiga();
-        const indiciInizio = lunghezzaRighe[0];
-        const inidiciFine = lunghezzaRighe[1];
-        console.log('INIZIO ' + indiciInizio);
-        console.log('FINE ' + inidiciFine);
-        //console.log(this.forma);
-        //                       |itero su righe tetramino|          |in base all'indice prende colonna corrispondente per ogni riga e poi la inverto| 
-        const tetraminoRuotato = this.forma.map((valore, indice) => this.forma.map(riga => riga[indice]).reverse());
-        this.forma = tetraminoRuotato;
-        //console.log(tetraminoRuotato);
-        
-        for (let righe = 0; righe < this.forma.length; righe++) {
-
-            for (let colonne = 0; colonne < this.forma[righe].length; colonne++){
-
-                    if (this.forma[righe][colonne] === 1) {
-
-                        var PosXrotazione = this.xpos / cella;
-                        //console.log(PosXrotazione);
-                        break;
-
+    rotazioneValida(nuovaForma, offsetX = 0, offsetY = 0) {
+        for (let righe = 0; righe < nuovaForma.length; righe++) {
+            for (let colonne = 0; colonne < nuovaForma[righe].length; colonne++) {
+                if (nuovaForma[righe][colonne] === 1) {
+                    const x = (this.xpos / cella) + colonne + offsetX;
+                    const y = (this.ypos / cella) + righe + offsetY;
+    
+                    // Fuori campo
+                    if (x < 0 || x >= MatriceCampo[0].length || y >= MatriceCampo.length) {
+                        return false;
                     }
-
+    
+                    // Collisione con blocco
+                    if (MatriceCampo[y][x] !== 0) {
+                        return false;
+                    }
                 }
             }
-
+        }
+        return true;
     }
 
 
