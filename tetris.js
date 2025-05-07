@@ -11,7 +11,7 @@ var cella = 30;
 
 var yposinizialegriglia = 0;
 
-var valoreCasuale = Math.round(Math.random() * 6);
+var valoreCasuale = Math.floor(Math.random() * 7);
 
 //Stile e posizionamento dell'area di gioco
 // TetrisArea.style.background = 'red';
@@ -20,14 +20,8 @@ TetrisArea.style.top = '50%';
 TetrisArea.style.left = '50%';
 TetrisArea.style.transform = 'translate(-50%, -50%)';
 
-
-var noblock = true;
-var blockorr = true;
-
 let ultimoAggiornamento = Date.now();  //Prende il tempo attuale in ms
-
 const tempoCaduta = 1000;  //intervallo di tempo
-
 
 /////////////////////////////////////////////////////////MATRICI////////////////////////////////////////////////////////    
 
@@ -202,7 +196,7 @@ class Tetramino {
         this.forma = formetetramini[valoreCasuale];
         this.colore = coloretramini[valoreCasuale];
         const larghezzaReale = this.calcolaLarghezza();
-        this.xpos = (MatriceCampo[0].length / 2 - Math.floor(larghezzaReale / 2)) * cella;
+        this.xpos = Math.floor((MatriceCampo[0].length / 2 - larghezzaReale / 2)) * cella;
         this.ypos = 0;
 
     }
@@ -282,10 +276,8 @@ class Tetramino {
     /////////////////////////////////METODO PER CALCOLARE LARGHEZZA TETRAMINO///////////////////////////////////////////////
 
     calcolaLarghezza() {
-
         const trasposta = this.forma[0].map((_, colIndex) => this.forma.map(riga => riga[colIndex]));  //Questa operazione serve a convertire le righe in colonne, per poter analizzare ogni colonna come se fosse una riga.
         return trasposta.reduce((larghezza, colonna) => larghezza + (colonna.some(cell => cell === 1) ? 1 : 0), 0);   //ritorna 2/3/4
-
     }
 
 
@@ -294,24 +286,23 @@ class Tetramino {
     bloccaTetramino(){
         //console.log(MatriceCampo)
 
-        for (let righe = 0; righe < tetramino.forma.length; righe++) {
+        for (let righe = 0; righe < this.forma.length; righe++) {
 
-            for (let colonne = 0; colonne < tetramino.forma[righe].length; colonne++) {
+            for (let colonne = 0; colonne < this.forma[righe].length; colonne++) {
 
                 if (tetramino.forma[righe][colonne] === 1) {
-
-                    var stampaY = tetramino.ypos + righe * cella;
-                    var stampaX = tetramino.xpos + colonne * cella;
-                    MatriceCampo[stampaY / cella][stampaX / cella] = this.colore; // Assegna il colore del tetramino alla matrice campo
-
+                    const y = (this.ypos + righe * cella) / cella;
+                    const x = (this.xpos + colonne * cella) / cella;
+                    if (y >= 0 && y < MatriceCampo.length && x >= 0 && x < MatriceCampo[0].length) {
+                        MatriceCampo[y][x] = this.colore;
+                    }
                 }
             }
         }
 
         //console.log(MatriceCampo);
-        valoreCasuale = Math.round(Math.random() * 6);
+        valoreCasuale = Math.floor(Math.random() * 7);
         tetramino = new Tetramino();
-        noblock = true;
 
     }
 
@@ -321,7 +312,7 @@ class Tetramino {
     calcolaAltezzaColonna() {  //calcola l'altezza occupata di ciascuna colonna
 
         const arrayAltColonne = [];  //array per memorizzare altezza di ogni colonna
-        const arraypolloalrosto = [];
+        const arraypolloalrosto = []; //Pollo al rosto = la colonna in cui stiamo calcolando l'altezza
 
         for (let colonna = 0; colonna < this.forma[0].length; colonna++) {
 
@@ -399,30 +390,25 @@ class Tetramino {
         const metodoaltezza = this.calcolaAltezzaColonna();
         const altezzeColonne = metodoaltezza[0];   // Ottiene le altezze delle colonne della forma corrente
         const polloalrosto = metodoaltezza[1];
-        const YinMatrice = this.ypos / cella;   //pos verticale
+        let collisione = false;
 
-        for (let colonna = 0; colonna < altezzeColonne.length; colonna++) {
+        for (let colonna = 0; colonna < polloalrosto.length; colonna++) {
 
-            const BaseTetramino = YinMatrice + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
+            const BaseTetramino = this.ypos / cella + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
             const XinMatrice = this.xpos / cella + polloalrosto[colonna];   //pos orizz
             //console.log(XinMatrice);
 
             if (BaseTetramino > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] !== 0) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
-
-                noblock = false;
-
+                collisione = true;
+                break;
             }
         }
 
         // Nessuna collisione, sposta il tetramino verso il basso
-        if(noblock){
-
+        if(!collisione){
             this.ypos += cella;
-
         } else {
-
             this.bloccaTetramino(); 
-
         }
     }
 
@@ -431,40 +417,24 @@ class Tetramino {
     movimentoOrizzontale(direzione) {
 
         const nuovaXpos = this.xpos + direzione * cella;
-        const lunghezzaRighe = this.calcolaLunghezzaRiga();
-        const indiciInizio = lunghezzaRighe[0];
-        const inidiciFine = lunghezzaRighe[1];
-        const YinMatrice = this.ypos / cella;
 
-        for (let righe = 0; righe < indiciInizio.length; righe++) {
-            const latoTetraminoMinore = nuovaXpos / cella + indiciInizio[righe];
-            const latoTetraminoMaggiore = nuovaXpos / cella + inidiciFine[righe];
-
-            if (direzione === -1 && MatriceCampo[YinMatrice + righe][latoTetraminoMinore] !== 0) {
-
-                blockorr = false;
-                return;
-
-            }
-            if (direzione === 1 && MatriceCampo[YinMatrice + righe][latoTetraminoMaggiore] !== 0) {
-
-                blockorr = false;
-                return;
-
+        for (let riga = 0; riga < this.forma.length; riga++) {
+            for (let colonna = 0; colonna < this.forma[0].length; colonna++){
+                if (this.forma[riga][colonna] === 1){
+                    const Posizionex = nuovaXpos / cella + colonna;
+                    const Posizioney = this.ypos / cella + riga;
+                    if (Posizionex < 0 || Posizionex >= MatriceCampo[0].length || MatriceCampo[Posizioney][Posizionex] !== 0) {
+                        return;
+                    }
+                }
             }
         }
-
-        if (blockorr) {
-
-            this.xpos = nuovaXpos;
-
-        }
-
-        blockorr = true;
+        this.xpos = nuovaXpos;
     }
 }
 
 //////////////////////////////////LISTENER SUI TASTI FRECCIA///////////////////////////////////////////////////////////////
+var tetramino = new Tetramino();
 var calmate = true;
 
 document.addEventListener("keydown", (event) => {
@@ -498,65 +468,4 @@ document.addEventListener("keyup", () => {
 
 });
 
-
-
-
 requestAnimationFrame(cadutaAutomatica);
-
-var tetramino = new Tetramino();
-
-
-
-
-
-
-
-
-// tetramino.calcolaLunghezzaRiga();
-
-
-// const TetraminoL = {
-//     forma : [
-//         [0, 0, 0, 0],
-//         [0, 0, 0, 0],
-//         [1, 1, 1, 1],
-//         [0, 0, 0, 1]
-//     ],
-
-//     colore : '#1abc9c'
-// }
-
-// const TetraminoL = {
-//     forma : [
-//         [1, 1, 1, 1],
-//         [0, 0, 0, 1],
-//         [0, 0, 0, 0],
-//         [0, 0, 0, 0]
-//     ],
-
-//     colore : '#1abc9c'
-// }
-
-
-
-
-
-  // if (nuovaXpos >= 0 && nuovaXpos + larghezzaReale * cella <= TetrisArea.width) {
-        //     this.xpos = nuovaXpos;
-        // }
-
-
-
-
-
-        // const larghezzaReale = this.calcolaLarghezza();    (in movimento orizzontale)
-
-
-
-
-
-           // calcolaAltezza() {
-    //     //reduce itera su ogni riga di forma
-    //     //se la riga contiene almeno un 1 incrementa altezza
-    //     return this.forma.reduce((altezza, riga) => altezza + (riga.some(cell => cell === 1) ? 1 : 0), 0);    (ex metodo tetramino)
-    // }
