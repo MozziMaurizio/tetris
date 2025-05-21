@@ -7,7 +7,9 @@ const TetrisArea = document.getElementById('Areadigioco');
 var ELtetris = TetrisArea.getContext('2d');
 
 // Grandezza blocco
-var cella = 30;
+var cella = 36;
+var punteggio = 0;
+var combo = 0;
 
 var yposinizialegriglia = 0;
 
@@ -97,33 +99,27 @@ const TetraminoC = {
 
 //Campo di gioco
 var MatriceCampo = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    //,[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
 //Array contenenti tetramini e colori
@@ -133,6 +129,22 @@ var coloretramini = [TetraminoT.colore, TetraminoL.colore, TetraminoJ.colore, Te
 //Dimensioni area di gioco
 TetrisArea.height = cella * MatriceCampo.length;
 TetrisArea.width = cella * MatriceCampo[0]. length;
+
+/////////////////////////////////////////////FUNZIONE ELIMINARE RIGA//////////////////////////////////////////////////////
+
+function eliminaRiga() {
+    var numeroRigheScoppiate = 0;
+    for(let riga = 0; riga < MatriceCampo.length; riga++){
+        const rigaCompleta = MatriceCampo[riga].every(num => num !== 0);
+        var indiceRiga = riga;
+        if (rigaCompleta){
+            MatriceCampo.splice(indiceRiga,1);
+            MatriceCampo.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            numeroRigheScoppiate += 1;
+        }
+    }
+    console.log(numeroRigheScoppiate);
+}
 
 /////////////////////////////////////////////FUNZIONE PER DISEGNARE GRIGLIA///////////////////////////////////////////////
 
@@ -301,6 +313,7 @@ class Tetramino {
         }
 
         //console.log(MatriceCampo);
+        eliminaRiga();
         valoreCasuale = Math.floor(Math.random() * 7);
         tetramino = new Tetramino();
 
@@ -431,6 +444,36 @@ class Tetramino {
         }
         this.xpos = nuovaXpos;
     }
+
+    HARDDROP() {
+
+        const metodoaltezza = this.calcolaAltezzaColonna();
+        const altezzeColonne = metodoaltezza[0];   // Ottiene le altezze delle colonne della forma corrente
+        const polloalrosto = metodoaltezza[1];
+        let collisione = false;
+
+        do{
+            for (let colonna = 0; colonna < polloalrosto.length; colonna++) {
+
+                const BaseTetramino = this.ypos / cella + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
+                const XinMatrice = this.xpos / cella + polloalrosto[colonna];   //pos orizz
+                //console.log(XinMatrice);
+
+                if (BaseTetramino > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] !== 0) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
+                    collisione = true;
+                    break;
+                }
+            }
+
+            if(!collisione){
+                this.ypos += cella;
+            } else {
+                this.bloccaTetramino(); 
+            }
+        
+        }while(!collisione);
+        
+    }
 }
 
 //////////////////////////////////LISTENER SUI TASTI FRECCIA///////////////////////////////////////////////////////////////
@@ -449,6 +492,10 @@ document.addEventListener("keydown", (event) => {
     
     if (event.key === "ArrowDown") {
         tetramino.movimentoVert();
+    }
+
+    if (event.key === " ") {
+        tetramino.HARDDROP();
     }
     
     if (calmate) {
