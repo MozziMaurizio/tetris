@@ -7,6 +7,9 @@ body{
     height: 100vh; */
 }
 
+#countdown-start {
+    color: white;
+}
 /* #Areadigioco{
     width: 400px;
     height: 800px;

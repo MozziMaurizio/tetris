@@ -516,9 +516,28 @@ document.addEventListener("keyup", () => {
 });
 
 document.getElementById("play-btn").addEventListener("click", () => {
-    setTimeout(() => {
-        requestAnimationFrame(cadutaAutomatica);
-    }, 500);
+    // setTimeout(() => {
+    //     requestAnimationFrame(cadutaAutomatica);
+    // }, 500);
+
+    startGame();
+
     
 });
 
+function startGame() {
+    let tempo = 3;
+    const countDownEl = document.getElementById("countdown-start");
+    countDownEl.textContent = tempo;
+    setInterval(() => {
+        if(tempo > 0) {
+            tempo--
+            console.log(tempo);
+            countDownEl.textContent = tempo;
+        } else if (tempo === 0) {
+            countDownEl.textContent = "VIA!";
+            requestAnimationFrame(cadutaAutomatica);
+        }
+    }, 1000)
+    
+}
