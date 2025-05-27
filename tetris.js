@@ -515,4 +515,10 @@ document.addEventListener("keyup", () => {
 
 });
 
-requestAnimationFrame(cadutaAutomatica);
+document.getElementById("play-btn").addEventListener("click", () => {
+    setTimeout(() => {
+        requestAnimationFrame(cadutaAutomatica);
+    }, 500);
+    
+});
+
