@@ -530,14 +530,13 @@ function startGame() {
     const countDownEl = document.getElementById("countdown-start");
     countDownEl.textContent = tempo;
     setInterval(() => {
-        if(tempo > 0) {
+        if(tempo > 1) {
             tempo--
             console.log(tempo);
             countDownEl.textContent = tempo;
-        } else if (tempo === 0) {
+        } else if (tempo === 1) {
             countDownEl.textContent = "VIA!";
             requestAnimationFrame(cadutaAutomatica);
         }
     }, 1000)
-    
 }
