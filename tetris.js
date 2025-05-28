@@ -9,11 +9,11 @@ var ELtetris = TetrisArea.getContext('2d');
 // Grandezza blocco
 var cella = 36;
 var punteggio = 0;
-var combo = 0;
 
 var yposinizialegriglia = 0;
 
-var valoreCasuale = Math.floor(Math.random() * 7);
+//var valoreCasuale = Math.floor(Math.random() * 7);
+var valoreCasuale = 3;
 
 //Stile e posizionamento dell'area di gioco
 // TetrisArea.style.background = 'red';
@@ -62,7 +62,7 @@ const TetraminoI = {
         [0, 1, 0, 0],
         [0, 1, 0, 0],
         [0, 1, 0, 0],
-        [0, 1, 0, 0]
+        //[0, 1, 0, 0]
     ],
 
     colore : '#e74c3c'
@@ -98,28 +98,49 @@ const TetraminoC = {
 }
 
 //Campo di gioco
+// var MatriceCampo = [
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+// ];
+
 var MatriceCampo = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    //,[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
 ];
 
 //Array contenenti tetramini e colori
@@ -132,18 +153,36 @@ TetrisArea.width = cella * MatriceCampo[0]. length;
 
 /////////////////////////////////////////////FUNZIONE ELIMINARE RIGA//////////////////////////////////////////////////////
 
+var moltiplicatore = 1;
+var numeroRigheScoppiatePerMolt = 0;
+
 function eliminaRiga() {
+    var bonus = 0;
     var numeroRigheScoppiate = 0;
+    
     for(let riga = 0; riga < MatriceCampo.length; riga++){
         const rigaCompleta = MatriceCampo[riga].every(num => num !== 0);
         var indiceRiga = riga;
         if (rigaCompleta){
             MatriceCampo.splice(indiceRiga,1);
-            MatriceCampo.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            //MatriceCampo.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            MatriceCampo.unshift([0, 0, 0, 0]);
             numeroRigheScoppiate += 1;
         }
     }
-    console.log(numeroRigheScoppiate);
+
+    if(numeroRigheScoppiate !== 0){
+        numeroRigheScoppiatePerMolt += numeroRigheScoppiate;
+        if(numeroRigheScoppiatePerMolt >= 18){moltiplicatore = 10} else if(numeroRigheScoppiatePerMolt >= 16){moltiplicatore = 9} else if(numeroRigheScoppiatePerMolt >= 14){moltiplicatore = 8} else if(numeroRigheScoppiatePerMolt >= 12){moltiplicatore = 7} else if(numeroRigheScoppiatePerMolt >= 10){moltiplicatore = 6} else if(numeroRigheScoppiatePerMolt >= 8){moltiplicatore = 5} else if(numeroRigheScoppiatePerMolt >= 6){moltiplicatore = 4} else if(numeroRigheScoppiatePerMolt >= 4){moltiplicatore = 3} else if(numeroRigheScoppiatePerMolt >= 2){moltiplicatore = 2}
+        if(numeroRigheScoppiate === 2){ bonus += 50 } else if (numeroRigheScoppiate === 3){ bonus += 100 } else if (numeroRigheScoppiate === 4){ bonus += 150 }
+        punteggio += (100 * numeroRigheScoppiate * moltiplicatore) + bonus;
+        console.log(numeroRigheScoppiatePerMolt);
+        console.log(numeroRigheScoppiate);
+    }
+
+    document.getElementById('punteggio').textContent = punteggio;
+    document.getElementById('moltiplicatore').textContent = 'X ' + moltiplicatore;
+    //console.log(punteggio);
 }
 
 /////////////////////////////////////////////FUNZIONE PER DISEGNARE GRIGLIA///////////////////////////////////////////////
@@ -314,7 +353,8 @@ class Tetramino {
 
         //console.log(MatriceCampo);
         eliminaRiga();
-        valoreCasuale = Math.floor(Math.random() * 7);
+        //valoreCasuale = Math.floor(Math.random() * 7);
+        valoreCasuale = 3;
         tetramino = new Tetramino();
 
     }
@@ -515,29 +555,38 @@ document.addEventListener("keyup", () => {
 
 });
 
-document.getElementById("play-btn").addEventListener("click", () => {
-    // setTimeout(() => {
-    //     requestAnimationFrame(cadutaAutomatica);
-    // }, 500);
+requestAnimationFrame(cadutaAutomatica);
 
-    startGame();
+// document.getElementById("play-btn").addEventListener("click", () => {
+//     // setTimeout(() => {
+//     //     requestAnimationFrame(cadutaAutomatica);
+//     // }, 500);
+//     if (giocoInCorso === false) {
+//         startGame();
+//         giocoInCorso = true;
+//     }
+// });
 
-    
-});
+// function startGame() {
+//     let tempo = 3;
+//     const countDownEl = document.getElementById("countdown-start");
+//     countDownEl.style.fontSize = "11rem";
+//     countDownEl.style.fontFamily = ""
+//     countDownEl.textContent = tempo;
+//     setInterval(() => {
+//         if(tempo > 1) {
+//             tempo--
+//             console.log(tempo);
+//             countDownEl.textContent = tempo;
+//         } else if (tempo === 1) {
 
-function startGame() {
-    let tempo = 3;
-    const countDownEl = document.getElementById("countdown-start");
-    countDownEl.textContent = tempo;
-    setInterval(() => {
-        if(tempo > 1) {
-            tempo--
-            console.log(tempo);
-            countDownEl.textContent = tempo;
-        } else if (tempo === 1) {
-            countDownEl.textContent = "SEI GAY!";
-            countDownEl.style.fontSize = "11rem";
-            requestAnimationFrame(cadutaAutomatica);
-        }
-    }, 1000)
-}
+//             countDownEl.textContent = "SEI GAY!";
+
+//             setTimeout(() =>{
+//                 countDownEl.textContent ="";
+//             }, 1000);
+
+//             requestAnimationFrame(cadutaAutomatica);
+//         }
+//     }, 1000)
+// }
