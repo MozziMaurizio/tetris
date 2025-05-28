@@ -535,7 +535,8 @@ function startGame() {
             console.log(tempo);
             countDownEl.textContent = tempo;
         } else if (tempo === 1) {
-            countDownEl.textContent = "VIA!";
+            countDownEl.textContent = "SEI GAY!";
+            countDownEl.style.fontSize = "11rem";
             requestAnimationFrame(cadutaAutomatica);
         }
     }, 1000)

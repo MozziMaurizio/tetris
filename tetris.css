@@ -9,6 +9,9 @@ body{
 
 #countdown-start {
     color: white;
+    width: 700px;
+    text-align: center;
+    margin: 11rem auto;
 }
 /* #Areadigioco{
     width: 400px;
