@@ -165,8 +165,8 @@ function eliminaRiga() {
         var indiceRiga = riga;
         if (rigaCompleta){
             MatriceCampo.splice(indiceRiga,1);
-            //MatriceCampo.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-            MatriceCampo.unshift([0, 0, 0, 0]);
+            MatriceCampo.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            //MatriceCampo.unshift([0, 0, 0, 0]);
             numeroRigheScoppiate += 1;
         }
     }
@@ -248,7 +248,7 @@ class Tetramino {
         this.colore = coloretramini[valoreCasuale];
         const larghezzaReale = this.calcolaLarghezza();
         this.xpos = Math.floor((MatriceCampo[0].length / 2 - larghezzaReale / 2)) * cella;
-        this.ypos = 0;//-cella * (this.forma.length)
+        this.ypos = -cella * (this.forma.length);
 
     }
 
@@ -308,9 +308,6 @@ class Tetramino {
     disegna() {
 
         ELtetris.fillStyle = this.colore;
-        const tetraminoRuotato = this.forma[0].map((_, colIndex) =>
-            this.forma.map(riga => riga[colIndex]).reverse()
-        );
 
         for (let righe = 0; righe < this.forma.length; righe++) {
 
@@ -321,15 +318,6 @@ class Tetramino {
                     const x = this.xpos + colonne * cella;
                     const y = this.ypos + righe * cella;
                     ELtetris.fillRect(x, y, this.width, this.height);
-
-                    if(MatriceCampo[y / cella][x / cella] !== 0){
-                        // if(valoreCasuale === 3){
-                        //     console.log('ww');
-                        // }
-                        
-                        this.forma = tetraminoRuotato;
-                        break;
-                    }
 
                 }
             }
@@ -367,10 +355,13 @@ class Tetramino {
         eliminaRiga();
         //valoreCasuale = Math.floor(Math.random() * 7);
         valoreCasuale = 3;
-        tetramino = new Tetramino();
-
+        tetramino = prossimotetramino;
+        prossimotetramino = new Tetramino();
+        console.log(prossimotetramino.forma);
+        //Gameover();
+        //tetramino.checkOnSpawn();
+        
     }
-
     
     /////////////////////////////////////METODO PER CALCOLARE ALTEZZA COLONNE/////////////////////////////////////////////
 
@@ -529,7 +520,14 @@ class Tetramino {
 }
 
 //////////////////////////////////LISTENER SUI TASTI FRECCIA///////////////////////////////////////////////////////////////
+
 var tetramino = new Tetramino();
+
+//valoreCasuale = Math.floor(Math.random() * 7);
+valoreCasuale = 3;
+var prossimotetramino = new Tetramino();
+console.log(prossimotetramino.forma);
+
 var calmate = true;
 
 document.addEventListener("keydown", (event) => {
@@ -569,8 +567,32 @@ document.addEventListener("keyup", () => {
 
 /////////////////////////////////////////////FUNZIONE GAME OVER//////////////////////////////////////////////////////
 
-// function checkSpawn(){
-//     if(MatriceCampo[tetramino.y / cella][tetramino.x / cella] !== 0){}
+// function checkOnSpawn(){
+//     const tetraminoRuotato = this.forma[0].map((_, colIndex) =>
+//         this.forma.map(riga => riga[colIndex]).reverse()
+//     );
+
+//     for (let righe = 0; righe < this.forma.length; righe++) {
+
+//         for (let colonne = 0; colonne < this.forma[righe].length; colonne++) {
+
+//             if (this.forma[righe][colonne] === 1) {
+                    
+//                 const x = this.xpos + colonne * cella;
+//                 const y = this.ypos + righe * cella;
+
+//                 if(MatriceCampo[y / cella][x / cella] !== 0){
+//                     // if(valoreCasuale === 3){
+//                     //     console.log('ww');
+//                     // }
+                        
+//                     this.forma = tetraminoRuotato;
+//                     break;
+//                 }
+
+//             }
+//         }
+//     }
 // }
 
 function Gameover() {
@@ -578,8 +600,6 @@ function Gameover() {
         alert('GAME OVER');
     }
 }
-
-Gameover();
 
 requestAnimationFrame(cadutaAutomatica);
 
