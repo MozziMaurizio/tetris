@@ -9,6 +9,9 @@ var ELtetris = TetrisArea.getContext('2d');
 // Grandezza blocco 36
 var cella = 30;
 var punteggio = 0;
+var puntiBasePerRiga = 100;
+
+
 
 var yposinizialegriglia = 0;
 
@@ -21,13 +24,13 @@ TetrisArea.style.top = '50%';
 TetrisArea.style.left = '50%';
 TetrisArea.style.transform = 'translate(-50%, -50%)';
 
-let ultimoAggiornamento = Date.now();  //Prende il tempo attuale in ms
-const tempoCaduta = 1000;  //intervallo di tempo
+var ultimoAggiornamento = Date.now();  //Prende il tempo attuale in ms
+var tempoCaduta = 1000;  //intervallo di tempo
 
-let righeInvisibili = 4;
-let righeVisibili = 20;
+var righeInvisibili = 4;
+var righeVisibili = 20;
 
-let go = false;
+var go = false;
 
 /////////////////////////////////////////////////////////MATRICI////////////////////////////////////////////////////////    
 
@@ -147,6 +150,7 @@ var moltiplicatore = 1;
 var numeroRigheScoppiatePerMolt = 0;
 
 function eliminaRiga() {
+
     var bonus = 0;
     var numeroRigheScoppiate = 0;
     
@@ -164,18 +168,23 @@ function eliminaRiga() {
         numeroRigheScoppiatePerMolt += numeroRigheScoppiate;
         if(numeroRigheScoppiatePerMolt >= 18){moltiplicatore = 10} else if(numeroRigheScoppiatePerMolt >= 16){moltiplicatore = 9} else if(numeroRigheScoppiatePerMolt >= 14){moltiplicatore = 8} else if(numeroRigheScoppiatePerMolt >= 12){moltiplicatore = 7} else if(numeroRigheScoppiatePerMolt >= 10){moltiplicatore = 6} else if(numeroRigheScoppiatePerMolt >= 8){moltiplicatore = 5} else if(numeroRigheScoppiatePerMolt >= 6){moltiplicatore = 4} else if(numeroRigheScoppiatePerMolt >= 4){moltiplicatore = 3} else if(numeroRigheScoppiatePerMolt >= 2){moltiplicatore = 2}
         if(numeroRigheScoppiate === 2){ bonus += 50 } else if (numeroRigheScoppiate === 3){ bonus += 100 } else if (numeroRigheScoppiate === 4){ bonus += 150 }
-        punteggio += (100 * numeroRigheScoppiate * moltiplicatore) + bonus;
+        punteggio += (puntiBasePerRiga * numeroRigheScoppiate * moltiplicatore) + bonus;
         console.log(numeroRigheScoppiatePerMolt);
         console.log(numeroRigheScoppiate);
     }
 
     document.getElementById('punteggio').textContent = punteggio;
     document.getElementById('moltiplicatore').textContent = 'X ' + moltiplicatore;
+
+    difficoltàClassicMode();
+
 }
 
 /////////////////////////////////////////////FUNZIONE PER DISEGNARE GRIGLIA///////////////////////////////////////////////
 
 function disegnaGriglia() {
+
+
 
     for(let righe = 0; righe < MatriceCampo.length; righe++){  //itera attraverso le righe della matrice campo
 
@@ -204,6 +213,7 @@ function disegnaGriglia() {
 
 function cadutaAutomatica() {
 
+
     const tempoOra = Date.now();  //Prende il tempo attuale in ms e incrementa con la richiesta dei frame
 
     if (tempoOra - ultimoAggiornamento >= tempoCaduta) {  //Quando la differenza tra il tempo attuale e l'ultimo aggiornamento è maggiore o uguale al'intervallo aggiorna la posizione y e l'ultimo aggiornamento
@@ -213,9 +223,70 @@ function cadutaAutomatica() {
 
     }
 
+    
     aggiorna();
     requestAnimationFrame(cadutaAutomatica);
 }
+
+////////////////////////////////////////////VELOCITA GIOCO////////////////////////////////////////////////////
+
+function difficoltàClassicMode () {
+    if (punteggio >= 10000) {
+
+        tempoCaduta = 850;
+        puntiBasePerRiga = 125;
+
+    } else if (punteggio >= 20000) {
+
+        tempoCaduta = 700; 
+        puntiBasePerRiga = 150; 
+
+    } else if (punteggio >= 30000) { 
+
+        tempoCaduta = 850; 
+        puntiBasePerRiga = 125;
+    } else if (punteggio >= 20000) {
+
+        tempoCaduta = 700; 
+        puntiBasePerRiga = 150; 
+
+    } else if (punteggio >= 30000) { 
+
+        tempoCaduta = 550; 
+        puntiBasePerRiga = 175;
+
+    } else if (punteggio >= 45000) {
+
+        tempoCaduta = 425; 
+        puntiBasePerRiga = 200; 
+
+    } else if (punteggio >= 65000) { 
+
+        tempoCaduta = 325; 
+        puntiBasePerRiga = 225;
+    } else if (punteggio >= 90000) {
+
+        tempoCaduta = 250; 
+        puntiBasePerRiga = 250; 
+
+    } else if (punteggio >= 120000) { 
+
+        tempoCaduta = 180; 
+        puntiBasePerRiga = 275;
+
+    } else if (punteggio >= 155000) { 
+
+        tempoCaduta = 130; 
+        puntiBasePerRiga = 300;
+
+    } else if (punteggio >= 195000) { 
+
+        tempoCaduta = 100; 
+        puntiBasePerRiga = 325;
+    } 
+}
+
+
 
 ///////////////////////////////////////FUNZIONE DI AGGIORNAMENTO///////////////////////////////////////////////////////
 
@@ -320,14 +391,12 @@ class Tetramino {
                     const x = this.xpos + colonne * cella;
                     const y = this.ypos + righe * cella;
 
-                    ELtetris.fillRect(x, y, this.width, this.height);
+                    // ELtetris.fillRect(x, y, this.width, this.height);
 
 
-                    // if (y >= 120) {
-                    //     ELtetris.fillRect(x, y, this.width, this.height);
-                    // }
-
-                    
+                    if (y >= 120) {
+                        ELtetris.fillRect(x, y, this.width, this.height);
+                    }
 
                 }
             }
