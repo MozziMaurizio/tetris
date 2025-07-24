@@ -231,59 +231,38 @@ function cadutaAutomatica() {
 ////////////////////////////////////////////VELOCITA GIOCO////////////////////////////////////////////////////
 
 function difficoltàClassicMode () {
-    if (punteggio >= 10000) {
-
-        tempoCaduta = 850;
-        puntiBasePerRiga = 125;
-
-    } else if (punteggio >= 20000) {
-
-        tempoCaduta = 700; 
-        puntiBasePerRiga = 150; 
-
-    } else if (punteggio >= 30000) { 
-
-        tempoCaduta = 850; 
-        puntiBasePerRiga = 125;
-    } else if (punteggio >= 20000) {
-
-        tempoCaduta = 700; 
-        puntiBasePerRiga = 150; 
-
-    } else if (punteggio >= 30000) { 
-
-        tempoCaduta = 550; 
-        puntiBasePerRiga = 175;
-
-    } else if (punteggio >= 45000) {
-
-        tempoCaduta = 425; 
-        puntiBasePerRiga = 200; 
-
-    } else if (punteggio >= 65000) { 
-
-        tempoCaduta = 325; 
-        puntiBasePerRiga = 225;
+    if (punteggio >= 195000) {
+        tempoCaduta = 100;
+        //puntiBasePerRiga = 325;
+    } else if (punteggio >= 155000) {
+        tempoCaduta = 130;
+        //puntiBasePerRiga = 300;
+    } else if (punteggio >= 120000) {
+        tempoCaduta = 180;
+        //puntiBasePerRiga = 275;
     } else if (punteggio >= 90000) {
-
-        tempoCaduta = 250; 
-        puntiBasePerRiga = 250; 
-
-    } else if (punteggio >= 120000) { 
-
-        tempoCaduta = 180; 
-        puntiBasePerRiga = 275;
-
-    } else if (punteggio >= 155000) { 
-
-        tempoCaduta = 130; 
-        puntiBasePerRiga = 300;
-
-    } else if (punteggio >= 195000) { 
-
-        tempoCaduta = 100; 
-        puntiBasePerRiga = 325;
-    } 
+        tempoCaduta = 250;
+        //puntiBasePerRiga = 250;
+    } else if (punteggio >= 65000) {
+        tempoCaduta = 325;
+        //puntiBasePerRiga = 225;
+    } else if (punteggio >= 45000) {
+        tempoCaduta = 425;
+        //puntiBasePerRiga = 200;
+    } else if (punteggio >= 30000) {
+        tempoCaduta = 550;
+        //puntiBasePerRiga = 175;
+    } else if (punteggio >= 20000) {
+        tempoCaduta = 700;
+        //puntiBasePerRiga = 150;
+    } else if (punteggio >= 10000) {
+        tempoCaduta = 850;
+        //puntiBasePerRiga = 125;
+    } else {
+        // livello iniziale
+        tempoCaduta = 1000;
+        puntiBasePerRiga = 10000;
+    }
 }
 
 
@@ -602,6 +581,7 @@ var prossimotetramino = new Tetramino();
 console.log(prossimotetramino.forma);
 
 var calmate = true;
+//DAS 100 ARR 0
 
 document.addEventListener("keydown", (event) => {
 
