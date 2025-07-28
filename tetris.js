@@ -3,6 +3,10 @@
 //Canvas El
 const TetrisArea = document.getElementById('Areadigioco');
 
+const prossimoTetraminoEl = document.getElementById('prossimoTetramino');
+const prossimoTetraminoCtx = prossimoTetraminoEl.getContext('2d');
+
+
 //Contenuto Canvas
 var ELtetris = TetrisArea.getContext('2d');
 
@@ -290,6 +294,31 @@ function gameOver() {
     }
 }
 
+/////////////////////////////////////////////DISEGNAPROSSIMOTETRAMINO///////////////////////////////////////////////
+
+function disegnaProssimoTetramino() {
+    prossimoTetraminoCtx.clearRect(0, 0, prossimoTetraminoEl.width, prossimoTetraminoEl.height);
+
+
+    var prossimotetramino = new Tetramino();
+
+
+    prossimoTetraminoCtx.fillStyle = prossimotetramino.colore;
+
+
+    for (let riga = 0; riga < prossimotetramino.forma.length; riga++ ) {
+        for (let colonna = 0; colonna < prossimotetramino.forma[riga].length; colonna++ ) {
+            if (prossimotetramino.forma[riga][colonna] !== 0) {
+                const x = colonna * cella;
+                const y = riga * cella;
+                prossimoTetraminoCtx.fillRect(x, y, cella, cella);
+            }
+        }
+    }
+}
+
+
+
 ///////////////////////////////////////////COSTRUTTORE///////////////////////////////////////////////////////
 class Tetramino {
     constructor() {
@@ -412,7 +441,11 @@ class Tetramino {
         valoreCasuale = Math.floor(Math.random() * 7);
         tetramino = prossimotetramino;
         prossimotetramino = new Tetramino();
-        // console.log(prossimotetramino.forma);  
+
+        disegnaProssimoTetramino();
+
+        console.log(prossimotetramino);
+
         gameOver();
     }
     
@@ -576,9 +609,12 @@ class Tetramino {
 
 var tetramino = new Tetramino();
 
+
+
 valoreCasuale = Math.floor(Math.random() * 7);
 var prossimotetramino = new Tetramino();
 console.log(prossimotetramino.forma);
+disegnaProssimoTetramino();
 
 var calmate = true;
 //DAS 100 ARR 0
