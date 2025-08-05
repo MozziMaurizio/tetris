@@ -16,6 +16,8 @@ var cella = 30;
 var punteggio = 0;
 var puntiBasePerRiga = 100;
 
+//grandezza blocco  prossimo tetramino
+var cellaPT = cella / 1.2;
 
 
 var yposinizialegriglia = 0;
@@ -29,7 +31,7 @@ TetrisArea.style.top = '50%';
 TetrisArea.style.left = '50%';
 TetrisArea.style.transform = 'translate(-50%, -50%)';
 
-prossimoTetraminoEl.style.backgroundColor = 'red';
+// prossimoTetraminoEl.style.backgroundColor = 'red';
 prossimoTetraminoEl.width = cella * 5;
 prossimoTetraminoEl.height = cella * 4;
 
@@ -218,24 +220,7 @@ function disegnaGriglia() {
     }
 }
 
-////////////////////////////////////////////FUNZIONE PER CADUTA AUTOMATICA////////////////////////////////////////////////////
 
-function cadutaAutomatica() {
-
-
-    const tempoOra = Date.now();  //Prende il tempo attuale in ms e incrementa con la richiesta dei frame
-
-    if (tempoOra - ultimoAggiornamento >= tempoCaduta) {  //Quando la differenza tra il tempo attuale e l'ultimo aggiornamento è maggiore o uguale al'intervallo aggiorna la posizione y e l'ultimo aggiornamento
-
-        tetramino.movimentoVert();
-        ultimoAggiornamento = tempoOra;
-
-    }
-
-    
-    aggiorna();
-    requestAnimationFrame(cadutaAutomatica);
-}
 
 ////////////////////////////////////////////VELOCITA GIOCO////////////////////////////////////////////////////
 
@@ -278,13 +263,13 @@ function difficoltàClassicMode () {
 
 ///////////////////////////////////////FUNZIONE DI AGGIORNAMENTO///////////////////////////////////////////////////////
 
-function aggiorna() {
+// function aggiorna() {
 
-    ELtetris.clearRect(0, 0, TetrisArea.width, TetrisArea.height);
-    disegnaGriglia();
-    tetramino.disegna();
+//     ELtetris.clearRect(0, 0, TetrisArea.width, TetrisArea.height);
+//     disegnaGriglia();
+//     tetramino.disegna();
 
-}
+// }
 
 
 /////////////////////////////////////////////GAMEOVER///////////////////////////////////////////////
@@ -316,13 +301,13 @@ function disegnaProssimoTetramino() {
         for (let colonna = 0; colonna < prossimotetramino.forma[riga].length; colonna++ ) {
             if (prossimotetramino.forma[riga][colonna] !== 0) {
                 if (prossimotetramino.forma === formetetramini[3]) {
-                    var x = colonna * cella + cella;
+                    var x = colonna * cellaPT + cellaPT;
                 } else {
-                    var x = colonna * cella;
+                    var x = colonna * cellaPT;
                 }
 
-                const y = riga * cella;
-                prossimoTetraminoCtx.fillRect(x, y, cella, cella);
+                const y = riga * cellaPT;
+                prossimoTetraminoCtx.fillRect(x, y, cellaPT, cellaPT);
             }
         }
     }
@@ -618,90 +603,151 @@ class Tetramino {
     }
 }
 
+//////////////////////////////////OGGETTO PER TASTI///////////////////////////////////////////////////////////////
+const DAS = 150;
+const ARR = 50;
+
+
+let statoTasti = {
+
+    ArrowLeft: {
+        pressed: false, 
+        dasTimer: 0, 
+        arrTimer: 0,
+    },
+
+    ArrowRight: {
+        pressed: false, 
+        dasTimer: 0, 
+        arrTimer: 0,
+    },
+
+    ArrowDown: {
+        pressed: false, 
+        dasTimer: 0, 
+        arrTimer: 0,
+    }
+
+};
+
+let calmate = true;
+
+document.addEventListener('keydown', (event) => {
+    const key = event.key;
+
+    console.log(statoTasti[key]);
+})
+
+
+document.addEventListener('keydown', (event) => {
+    const key = event.key; 
+    if (statoTasti[key] && !statoTasti[key].pressed) {
+        statoTasti[key].pressed = true;
+        statoTasti[key].dasTimer = Date.now();
+        statoTasti[key].arrTimer = Date.now();
+
+        if (key === "ArrowLeft" ) tetramino.movimentoOrizzontale(-1);
+        if (key === "ArrowRight" ) tetramino.movimentoOrizzontale(1); 
+        if (key === "ArrowDown" ) tetramino.movimentoVert();
+
+    } 
+        if (key === " ") { tetramino.HARDDROP() };
+        if ( key === "ArrowUp" && calmate) {
+            calmate = false;
+            tetramino.ruota();
+        }
+
+});
+
+document.addEventListener("keyup", (event) => {
+    const key = event.key;
+    if (statoTasti[key]) {statoTasti[key].pressed = false;}
+    calmate = true;
+})
+
+function aggiorna() {
+    ELtetris.clearRect(0, 0, TetrisArea.width, TetrisArea.height);
+    disegnaGriglia();
+    tetramino.disegna();
+}
+
+requestAnimationFrame(gameLoop);
+
+function gameLoop() {
+    const now = Date.now();
+
+    if (now - ultimoAggiornamento >= tempoCaduta) {
+        tetramino.movimentoVert();
+        ultimoAggiornamento = now;
+    }
+
+    //controllo DAS e ARR
+    for (const key in statoTasti) {
+        const stato = statoTasti[key];
+        if (stato.pressed) {
+            const elapsedDAS = now - stato.dasTimer;
+            const elapsedARR = now - stato.arrTimer;
+
+            if (elapsedDAS >= DAS && elapsedARR >= ARR) {
+                if (key === "ArrowLeft") tetramino.movimentoOrizzontale(-1);
+                if (key === "ArrowRight") tetramino.movimentoOrizzontale(1);
+                if (key === "ArrowDown") tetramino.movimentoVert();
+                stato.arrTimer = now;
+            }
+        }
+    }
+
+    aggiorna();
+    requestAnimationFrame(gameLoop);
+}
+
+
 //////////////////////////////////LISTENER SUI TASTI FRECCIA///////////////////////////////////////////////////////////////
 
 var tetramino = new Tetramino();
-
-
 
 valoreCasuale = Math.floor(Math.random() * 7);
 var prossimotetramino = new Tetramino();
 console.log(prossimotetramino.forma);
 disegnaProssimoTetramino();
 
-var calmate = true;
-//DAS 100 ARR 0
 
-document.addEventListener("keydown", (event) => {
 
-    if (event.key === "ArrowLeft") {
-        tetramino.movimentoOrizzontale(-1);
-    }
-    
-    if (event.key === "ArrowRight") {
-        tetramino.movimentoOrizzontale(1);
-    }
-    
-    if (event.key === "ArrowDown") {
-        tetramino.movimentoVert();
-    }
 
-    if (event.key === " ") {
-        tetramino.HARDDROP();
-    }
-    
-    if (calmate) {
-        if (event.key === "ArrowUp") {
-            calmate = false;
-            tetramino.ruota();
-        }
-    }
-    aggiorna();
+// document.getElementById("play-btn").addEventListener("click", () => {
+//     setTimeout(() => {
+//         requestAnimationFrame(cadutaAutomatica);
+//     }, 3000);
+//     if (giocoInCorso === false) {
+//         startGame();
+//         giocoInCorso = true;
+//     }
+// });
 
-});
 
-document.addEventListener("keyup", () => {
+// function startGame() {
+//     let tempo = 3;
+//     const countDownEl = document.getElementById("countdown-start");
+//     countDownEl.style.fontSize = "8rem";
+//     countDownEl.style.fontFamily = ""
+//     countDownEl.innerHTML = tempo;
+//     for (let i = 0; i < 1; i++) {
+//         setInterval(() => {
+//                 if(tempo > 1) {
+//                     tempo--
+//                     console.log(tempo);
+//                     countDownEl.innerHTML = tempo;
+//                 } else if (tempo === 1) {
 
-    calmate = true;
-    aggiorna();
+//                     countDownEl.innerHTML = "SEI GAY!";
 
-});
+//                     setTimeout(() =>{
+//                         countDownEl.textContent ="";
+//                     }, 1000);
 
-// requestAnimationFrame(cadutaAutomatica);
-
-document.getElementById("play-btn").addEventListener("click", () => {
-    setTimeout(() => {
-        requestAnimationFrame(cadutaAutomatica);
-    }, 3000);
-    if (giocoInCorso === false) {
-        startGame();
-        giocoInCorso = true;
-    }
-});
-
-function startGame() {
-    let tempo = 3;
-    const countDownEl = document.getElementById("countdown-start");
-    countDownEl.style.fontSize = "8rem";
-    countDownEl.style.fontFamily = ""
-    countDownEl.innerHTML = tempo;
-    for (let i = 0; i < 1; i++) {
-        setInterval(() => {
-                if(tempo > 1) {
-                    tempo--
-                    console.log(tempo);
-                    countDownEl.innerHTML = tempo;
-                } else if (tempo === 1) {
-
-                    countDownEl.innerHTML = "SEI GAY!";
-
-                    setTimeout(() =>{
-                        countDownEl.textContent ="";
-                    }, 1000);
-
-                    requestAnimationFrame(cadutaAutomatica);
-                }
-            }, 1000)
-    }
-   
-}
+//                     requestAnimationFrame(cadutaAutomatica);
+//                 }
+//             }, 1000)
+//     }
+//     document.getElementById('play-btn').remove();
+// }
