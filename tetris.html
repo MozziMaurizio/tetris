@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitcount:wght@100..900&display=swap" rel="stylesheet">
     <title>Document</title>
     <link rel="stylesheet" href="tetris.css">
 </head>
 <body>
+    <button onclick="startGame()" id="play-btn">Play</button>
+    <p class="tx-prossimo-tetramino">Prossimo Tetramino</p>
     <canvas id="Areadigioco"></canvas>
     <canvas id="prossimoTetramino"></canvas>
-    <button onclick="startGame()" id="play-btn">Play</button>
     <p id="countdown-start"></p>
     <p id="punteggio" style="color: aliceblue;">0</p>
     <p id="moltiplicatore" style="color: aliceblue;">X 1</p>

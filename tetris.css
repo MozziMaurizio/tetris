@@ -1,17 +1,43 @@
 body{
     background-color: #323232;
     margin: 0;
+    font-family: "Bitcount", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+        "slnt" 0,
+        "CRSV" 0.5,
+        "ELSH" 0,
+        "ELXP" 0;
     /* display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh; */
 }
 
+.cnt-prossimo-tetramino {
+    padding: 20px;
+    margin-left: 20px;
+    border: 1px dotted white;
+}
+
+#prossimoTetramino {
+    margin-left: 150px;
+}
+
+
+
 #countdown-start {
     color: white;
     width: 700px;
     text-align: center;
     margin: 11rem auto;
+}
+
+.tx-prossimo-tetramino {
+    color: white;
+    font-size: 35px;
 }
 /* #Areadigioco{
     width: 400px;

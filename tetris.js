@@ -2,13 +2,14 @@
 
 //Canvas El
 const TetrisArea = document.getElementById('Areadigioco');
+//Contenuto Canvas
+var ELtetris = TetrisArea.getContext('2d');
 
 const prossimoTetraminoEl = document.getElementById('prossimoTetramino');
 const prossimoTetraminoCtx = prossimoTetraminoEl.getContext('2d');
 
 
-//Contenuto Canvas
-var ELtetris = TetrisArea.getContext('2d');
+
 
 // Grandezza blocco 36
 var cella = 30;
@@ -27,6 +28,12 @@ TetrisArea.style.position = 'absolute';
 TetrisArea.style.top = '50%';
 TetrisArea.style.left = '50%';
 TetrisArea.style.transform = 'translate(-50%, -50%)';
+
+prossimoTetraminoEl.style.backgroundColor = 'red';
+prossimoTetraminoEl.width = cella * 5;
+prossimoTetraminoEl.height = cella * 4;
+
+// prossimoTetraminoEl.style.border-radius
 
 var ultimoAggiornamento = Date.now();  //Prende il tempo attuale in ms
 var tempoCaduta = 1000;  //intervallo di tempo
@@ -188,8 +195,6 @@ function eliminaRiga() {
 
 function disegnaGriglia() {
 
-
-
     for(let righe = 0; righe < MatriceCampo.length; righe++){  //itera attraverso le righe della matrice campo
 
     if (righe < righeInvisibili) continue;
@@ -297,6 +302,7 @@ function gameOver() {
 /////////////////////////////////////////////DISEGNAPROSSIMOTETRAMINO///////////////////////////////////////////////
 
 function disegnaProssimoTetramino() {
+
     prossimoTetraminoCtx.clearRect(0, 0, prossimoTetraminoEl.width, prossimoTetraminoEl.height);
 
 
@@ -309,7 +315,12 @@ function disegnaProssimoTetramino() {
     for (let riga = 0; riga < prossimotetramino.forma.length; riga++ ) {
         for (let colonna = 0; colonna < prossimotetramino.forma[riga].length; colonna++ ) {
             if (prossimotetramino.forma[riga][colonna] !== 0) {
-                const x = colonna * cella;
+                if (prossimotetramino.forma === formetetramini[3]) {
+                    var x = colonna * cella + cella;
+                } else {
+                    var x = colonna * cella;
+                }
+
                 const y = riga * cella;
                 prossimoTetraminoCtx.fillRect(x, y, cella, cella);
             }
@@ -442,7 +453,9 @@ class Tetramino {
         tetramino = prossimotetramino;
         prossimotetramino = new Tetramino();
 
-        disegnaProssimoTetramino();
+        // setInterval (() => {
+            disegnaProssimoTetramino();
+        // }, 500);
 
         console.log(prossimotetramino);
 
@@ -654,38 +667,41 @@ document.addEventListener("keyup", () => {
 
 });
 
-requestAnimationFrame(cadutaAutomatica);
+// requestAnimationFrame(cadutaAutomatica);
 
-// document.getElementById("play-btn").addEventListener("click", () => {
-//     // setTimeout(() => {
-//     //     requestAnimationFrame(cadutaAutomatica);
-//     // }, 500);
-//     if (giocoInCorso === false) {
-//         startGame();
-//         giocoInCorso = true;
-//     }
-// });
+document.getElementById("play-btn").addEventListener("click", () => {
+    setTimeout(() => {
+        requestAnimationFrame(cadutaAutomatica);
+    }, 3000);
+    if (giocoInCorso === false) {
+        startGame();
+        giocoInCorso = true;
+    }
+});
 
-// function startGame() {
-//     let tempo = 3;
-//     const countDownEl = document.getElementById("countdown-start");
-//     countDownEl.style.fontSize = "11rem";
-//     countDownEl.style.fontFamily = ""
-//     countDownEl.textContent = tempo;
-//     setInterval(() => {
-//         if(tempo > 1) {
-//             tempo--
-//             console.log(tempo);
-//             countDownEl.textContent = tempo;
-//         } else if (tempo === 1) {
+function startGame() {
+    let tempo = 3;
+    const countDownEl = document.getElementById("countdown-start");
+    countDownEl.style.fontSize = "8rem";
+    countDownEl.style.fontFamily = ""
+    countDownEl.innerHTML = tempo;
+    for (let i = 0; i < 1; i++) {
+        setInterval(() => {
+                if(tempo > 1) {
+                    tempo--
+                    console.log(tempo);
+                    countDownEl.innerHTML = tempo;
+                } else if (tempo === 1) {
 
-//             countDownEl.textContent = "SEI GAY!";
+                    countDownEl.innerHTML = "SEI GAY!";
 
-//             setTimeout(() =>{
-//                 countDownEl.textContent ="";
-//             }, 1000);
+                    setTimeout(() =>{
+                        countDownEl.textContent ="";
+                    }, 1000);
 
-//             requestAnimationFrame(cadutaAutomatica);
-//         }
-//     }, 1000)
-// }
+                    requestAnimationFrame(cadutaAutomatica);
+                }
+            }, 1000)
+    }
+   
+}
