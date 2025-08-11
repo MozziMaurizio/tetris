@@ -646,10 +646,12 @@ document.addEventListener('keydown', (event) => {
         statoTasti[key].dasTimer = Date.now();
         statoTasti[key].arrTimer = Date.now();
 
-        if (key === "ArrowLeft" ) tetramino.movimentoOrizzontale(-1);
-        if (key === "ArrowRight" ) tetramino.movimentoOrizzontale(1); 
+        //nuovo aggiunto isLeft e isRight
+        if (key === "ArrowLeft" ) tetramino.movimentoOrizzontale(-1), isLeftPressed = true;
+        if (key === "ArrowRight" ) tetramino.movimentoOrizzontale(1), isRightPressed = true; 
         if (key === "ArrowDown" ) tetramino.movimentoVert();
-
+        //fine
+        
     } 
         if (key === " ") { tetramino.HARDDROP() };
         if ( key === "ArrowUp" && calmate) {
@@ -662,6 +664,12 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener("keyup", (event) => {
     const key = event.key;
     if (statoTasti[key]) {statoTasti[key].pressed = false;}
+
+    //nuovo aggiunto isLeft e isRight
+    if ( key === "ArrowLeft") isLeftPressed = false;
+    if ( key === "ArrowRight") isRightPressed = false;
+    //fine
+
     calmate = true;
 })
 
@@ -672,6 +680,12 @@ function aggiorna() {
 }
 
 requestAnimationFrame(gameLoop);
+
+
+//nuovo
+let isLeftPressed = false;
+let isRightPressed = false;
+//fine
 
 function gameLoop() {
     const now = Date.now();
@@ -689,8 +703,12 @@ function gameLoop() {
             const elapsedARR = now - stato.arrTimer;
 
             if (elapsedDAS >= DAS && elapsedARR >= ARR) {
-                if (key === "ArrowLeft") tetramino.movimentoOrizzontale(-1);
-                if (key === "ArrowRight") tetramino.movimentoOrizzontale(1);
+
+                //nuovo aggiunto isRight e isLeft
+                if (key === "ArrowLeft" && isRightPressed === false) tetramino.movimentoOrizzontale(-1), isLeftPressed = true, isRightPressed = false;
+                if (key === "ArrowRight" && isLeftPressed === false) tetramino.movimentoOrizzontale(1), isLeftPressed = false, isRightPressed = true;
+                //fine
+
                 if (key === "ArrowDown") tetramino.movimentoVert();
                 stato.arrTimer = now;
             }
@@ -700,6 +718,8 @@ function gameLoop() {
     aggiorna();
     requestAnimationFrame(gameLoop);
 }
+
+document.addEventListener("keydown", (event) )
 
 
 //////////////////////////////////LISTENER SUI TASTI FRECCIA///////////////////////////////////////////////////////////////
