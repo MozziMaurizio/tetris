@@ -395,9 +395,6 @@ class Tetramino {
                     const x = this.xpos + colonne * cella;
                     const y = this.ypos + righe * cella;
 
-                    // ELtetris.fillRect(x, y, this.width, this.height);
-
-
                     if (y >= 120) {
                         ELtetris.fillRect(x, y, this.width, this.height);
                     }
@@ -405,6 +402,57 @@ class Tetramino {
                 }
             }
         }
+    }
+
+    disegnaGhost() {
+        
+        ELtetris.strokeStyle = this.colore;
+        ELtetris.lineWidth = 2;
+        let yGhost = this.ypos; 
+
+        const metodoaltezza = this.calcolaAltezzaColonna();
+        const altezzeColonne = metodoaltezza[0];   // Ottiene le altezze delle colonne della forma corrente
+        const polloalrosto = metodoaltezza[1];
+        let collisione = false;
+
+        do{
+            for (let colonna = 0; colonna < polloalrosto.length; colonna++) {
+
+                const BaseTetramino = yGhost / cella + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
+                const XinMatrice = this.xpos / cella + polloalrosto[colonna];   //pos orizz
+
+                if (BaseTetramino > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] !== 0) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
+                    collisione = true;
+                    break;
+                }
+            }
+
+            if(!collisione){
+                yGhost += cella;
+            }
+        
+        }while(!collisione);
+
+
+
+        for (let righe = 0; righe < this.forma.length; righe++) {
+
+            for (let colonne = 0; colonne < this.forma[righe].length; colonne++) {
+
+                if (this.forma[righe][colonne] === 1) {
+                    
+                    const x = this.xpos + colonne * cella;
+                    const y = yGhost + righe * cella;
+
+                    if (y >= 120) {
+                        ELtetris.strokeRect(x, y, this.width, this.height);
+                    }
+
+                }
+            }
+        }
+
+        
     }
 
     /////////////////////////////////METODO PER CALCOLARE LARGHEZZA TETRAMINO///////////////////////////////////////////////
@@ -584,7 +632,6 @@ class Tetramino {
 
                 const BaseTetramino = this.ypos / cella + altezzeColonne[colonna];   // Calcola la base del tetramino in ogni colonna, in termini di posizione nella matrice
                 const XinMatrice = this.xpos / cella + polloalrosto[colonna];   //pos orizz
-                //console.log(XinMatrice);
 
                 if (BaseTetramino > MatriceCampo.length || MatriceCampo[BaseTetramino]?.[XinMatrice] !== 0) {  // Controlla se c'è collisione con il limite inferiore o con blocchi esistenti
                     collisione = true;
@@ -677,6 +724,7 @@ function aggiorna() {
     ELtetris.clearRect(0, 0, TetrisArea.width, TetrisArea.height);
     disegnaGriglia();
     tetramino.disegna();
+    tetramino.disegnaGhost();
 }
 
 requestAnimationFrame(gameLoop);
