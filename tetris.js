@@ -35,6 +35,7 @@ TetrisArea.style.transform = 'translate(-50%, -50%)';
 prossimoTetraminoEl.width = cella * 5;
 prossimoTetraminoEl.height = cella * 4;
 
+
 // prossimoTetraminoEl.style.border-radius
 
 var ultimoAggiornamento = Date.now();  //Prende il tempo attuale in ms
@@ -146,7 +147,7 @@ var MatriceCampo = [];
 for (let i = 0; i <= 23; i++) {
     MatriceCampo.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 };
-console.log(MatriceCampo);
+// console.log(MatriceCampo);
 
 
 //Array contenenti tetramini e colori
@@ -182,8 +183,8 @@ function eliminaRiga() {
         if(numeroRigheScoppiatePerMolt >= 18){moltiplicatore = 10} else if(numeroRigheScoppiatePerMolt >= 16){moltiplicatore = 9} else if(numeroRigheScoppiatePerMolt >= 14){moltiplicatore = 8} else if(numeroRigheScoppiatePerMolt >= 12){moltiplicatore = 7} else if(numeroRigheScoppiatePerMolt >= 10){moltiplicatore = 6} else if(numeroRigheScoppiatePerMolt >= 8){moltiplicatore = 5} else if(numeroRigheScoppiatePerMolt >= 6){moltiplicatore = 4} else if(numeroRigheScoppiatePerMolt >= 4){moltiplicatore = 3} else if(numeroRigheScoppiatePerMolt >= 2){moltiplicatore = 2}
         if(numeroRigheScoppiate === 2){ bonus += 50 } else if (numeroRigheScoppiate === 3){ bonus += 100 } else if (numeroRigheScoppiate === 4){ bonus += 150 }
         punteggio += (puntiBasePerRiga * numeroRigheScoppiate * moltiplicatore) + bonus;
-        console.log(numeroRigheScoppiatePerMolt);
-        console.log(numeroRigheScoppiate);
+        // console.log(numeroRigheScoppiatePerMolt);
+        // console.log(numeroRigheScoppiate);
     }
 
     document.getElementById('punteggio').textContent = punteggio;
@@ -211,6 +212,8 @@ function disegnaGriglia() {
                 ELtetris.fillStyle = MatriceCampo[righe][colonne]; // Usa il colore memorizzato
                 ELtetris.fillRect(x, y, cella, cella);
 
+            } else {
+                
             }
 
             ELtetris.lineWidth = 2;
@@ -220,6 +223,7 @@ function disegnaGriglia() {
     }
 }
 
+disegnaGriglia();
 
 
 ////////////////////////////////////////////VELOCITA GIOCO////////////////////////////////////////////////////
@@ -398,14 +402,92 @@ class Tetramino {
                     // ELtetris.fillRect(x, y, this.width, this.height);
 
 
+
                     if (y >= 120) {
                         ELtetris.fillRect(x, y, this.width, this.height);
+                        ELtetris.strokeStyle = "#fff";
+                        ELtetris.strokeRect(x, y, this.width, this.height);
                     }
 
                 }
             }
         }
     }
+
+
+    // --- ADD THIS INSIDE class Tetramino, subito dopo il metodo disegna() ---
+
+calcolaGhostY() {
+    // ritorna la y (in px) dove il tetramino atterrerà senza modificarne lo stato
+    let ghostY = this.ypos;
+
+    while (true) {
+        const nextY = ghostY + cella; // prova a spostare di 1 cella in basso
+        let collision = false;
+
+        for (let r = 0; r < this.forma.length; r++) {
+            for (let c = 0; c < this.forma[r].length; c++) {
+                if (this.forma[r][c] !== 1) continue;
+
+                const matrixRow = Math.floor(nextY / cella) + r;
+                const matrixCol = Math.floor(this.xpos / cella) + c;
+
+                // fuori orizzonte (sicurezza)
+                if (matrixCol < 0 || matrixCol >= MatriceCampo[0].length) {
+                    collision = true;
+                    break;
+                }
+
+                // collisione col fondo
+                if (matrixRow >= MatriceCampo.length) {
+                    collision = true;
+                    break;
+                }
+
+                // collisione con blocco esistente (solo se dentro la matrice)
+                if (matrixRow >= 0 && MatriceCampo[matrixRow][matrixCol] !== 0) {
+                    collision = true;
+                    break;
+                }
+            }
+            if (collision) break;
+        }
+
+        if (collision) break;
+        ghostY = nextY;
+    }
+
+    return ghostY;
+}
+
+disegnaGhost() {
+    const ghostY = this.calcolaGhostY();
+
+    ELtetris.save();
+    ELtetris.globalAlpha = 0.25;           // trasparenza della ghost
+    ELtetris.fillStyle = this.colore;     // stesso colore ma trasparente
+    ELtetris.setLineDash([5, 5]);         // bordo tratteggiato (opzionale)
+    ELtetris.lineWidth = 2;
+
+    for (let r = 0; r < this.forma.length; r++) {
+        for (let c = 0; c < this.forma[r].length; c++) {
+            if (this.forma[r][c] === 1) {
+                const x = this.xpos + c * cella;
+                const y = ghostY + r * cella;
+
+                // disegna solo nella parte visibile (coerente col tuo disegna())
+                if (y >= righeInvisibili * cella) {
+                    ELtetris.fillRect(x, y, cella, cella);
+                    ELtetris.strokeStyle = "#ffffff";
+                    ELtetris.strokeRect(x, y, cella, cella);
+                }
+            }
+        }
+    }
+
+    ELtetris.restore();
+}
+
 
     /////////////////////////////////METODO PER CALCOLARE LARGHEZZA TETRAMINO///////////////////////////////////////////////
 
@@ -428,6 +510,8 @@ class Tetramino {
                     const x = (this.xpos + colonne * cella) / cella;
                     if (y >= 0 && y < MatriceCampo.length && x >= 0 && x < MatriceCampo[0].length) {
                         MatriceCampo[y][x] = this.colore;
+                        ELtetris.strokeStyle = 'white';
+                        ELtetris.strokeRect(x * cella, y * cella, cella, cella);
                     }
                 }
             }
@@ -442,7 +526,7 @@ class Tetramino {
             disegnaProssimoTetramino();
         // }, 500);
 
-        console.log(prossimotetramino);
+        // console.log(prossimotetramino);
 
         gameOver();
     }
@@ -635,7 +719,7 @@ let calmate = true;
 document.addEventListener('keydown', (event) => {
     const key = event.key;
 
-    console.log(statoTasti[key]);
+    // console.log(statoTasti[key]);
 })
 
 
@@ -676,16 +760,25 @@ document.addEventListener("keyup", (event) => {
 function aggiorna() {
     ELtetris.clearRect(0, 0, TetrisArea.width, TetrisArea.height);
     disegnaGriglia();
+
+    // disegna l'ombra (ghost) del tetramino corrente
+    if (tetramino && typeof tetramino.disegnaGhost === 'function') {
+        tetramino.disegnaGhost();
+    }
+
+    // disegna il tetramino attivo
     tetramino.disegna();
 }
 
-requestAnimationFrame(gameLoop);
+
+// requestAnimationFrame(gameLoop);
 
 
 //nuovo
 let isLeftPressed = false;
 let isRightPressed = false;
 //fine
+
 
 function gameLoop() {
     const now = Date.now();
@@ -728,46 +821,59 @@ var tetramino = new Tetramino();
 
 valoreCasuale = Math.floor(Math.random() * 7);
 var prossimotetramino = new Tetramino();
-console.log(prossimotetramino.forma);
+// console.log(prossimotetramino.forma);
 disegnaProssimoTetramino();
 
 
+var giocoInCorso = false;
+
+const btnPlay = document.getElementById("play-btn");
+console.log(btnPlay);
+
+const testEl = document.getElementById('test');
+console.log(testEl);
+
+// testEl.style.f = 'white';
+// testEl.style.fontSize = '30px';
+
+btnPlay.addEventListener("click", () => {
+    if (giocoInCorso === false) {
+        giocoInCorso = true;
+        console.log('if');
+        startGame();
+        btnPlay.innerHTML = "Pausa";
+
+    } else  {
+        // cancelAnimationFrame(gameLoop);
+        giocoInCorso = null;
+        console.log('else');
+    }
+});
 
 
-// document.getElementById("play-btn").addEventListener("click", () => {
-//     setTimeout(() => {
-//         requestAnimationFrame(cadutaAutomatica);
-//     }, 3000);
-//     if (giocoInCorso === false) {
-//         startGame();
-//         giocoInCorso = true;
-//     }
-// });
+const countDownEl = document.getElementById("countdown-start");
+countDownEl.style.fontSize = "8rem";
+countDownEl.style.fontFamily = ""
 
+function startGame() {
+    // if (giocoInCorso) return;
+    let tempo = 3;
+    countDownEl.innerHTML = tempo;
+    let intervallo = setInterval(() => {
+        if(tempo > 0) {
+            countDownEl.innerHTML = tempo;
+            tempo--
+        } else if (tempo === 0) {
 
-// function startGame() {
-//     let tempo = 3;
-//     const countDownEl = document.getElementById("countdown-start");
-//     countDownEl.style.fontSize = "8rem";
-//     countDownEl.style.fontFamily = ""
-//     countDownEl.innerHTML = tempo;
-//     for (let i = 0; i < 1; i++) {
-//         setInterval(() => {
-//                 if(tempo > 1) {
-//                     tempo--
-//                     console.log(tempo);
-//                     countDownEl.innerHTML = tempo;
-//                 } else if (tempo === 1) {
+            countDownEl.innerHTML = "VIA!";
 
-//                     countDownEl.innerHTML = "SEI GAY!";
+            setTimeout(() =>{
+                countDownEl.textContent ="";
+                requestAnimationFrame(gameLoop);
+            }, 1000);
 
-//                     setTimeout(() =>{
-//                         countDownEl.textContent ="";
-//                     }, 1000);
-
-//                     requestAnimationFrame(cadutaAutomatica);
-//                 }
-//             }, 1000)
-//     }
-//     document.getElementById('play-btn').remove();
-// }
+            clearInterval(intervallo);
+        }
+    }, 1000)
+    // document.getElementById('play-btn').remove();
+}
