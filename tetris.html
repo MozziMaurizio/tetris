@@ -11,19 +11,21 @@
 </head>
 <body>
     <div class="cnt">
-        <video class="video-bg" autoplay loop src="./assets/background/90s-retro-room-pixel-moewalls-com.mp4"></video>
         <p id="countdown-start"></p>
-
-        <button id="play-btn">Play</button>
-        <div class="prossimo-tetramino">
-            <p class="tx-prossimo-tetramino">Prossimo Tetramino</p>
-            <canvas id="prossimoTetramino"></canvas>
+        <div class=" canvas-cnt ">
+            <canvas id="Areadigioco"></canvas>
         </div>
-        <canvas id="Areadigioco"></canvas>
-        <p id="punteggio" style="color: aliceblue;">0</p>
-        <p id="moltiplicatore" style="color: aliceblue;">X 1</p>
+        <div class="stats">
+            <div class="prossimo-tetramino">
+                <canvas id="prossimoTetramino" style="padding: 20px 0 0 80px;"></canvas>
+            </div>
+            <div class="punteggio">
+                <p id="punteggio" style="color: aliceblue;">0</p>
+                <p id="moltiplicatore" style="color: aliceblue;">X 1</p>
+            </div>
+            <button id="play-btn">PLAY</button>
+        </div>
     </div>
-    
     <script src="tetris.js"></script>
 </body>
 </html>

@@ -26,10 +26,10 @@ var valoreCasuale = Math.floor(Math.random() * 7);
 
 //Stile e posizionamento dell'area di gioco
 // TetrisArea.style.background = 'red';
-TetrisArea.style.position = 'absolute';
-TetrisArea.style.top = '50%';
-TetrisArea.style.left = '50%';
-TetrisArea.style.transform = 'translate(-50%, -50%)';
+// TetrisArea.style.position = 'absolute';
+// TetrisArea.style.top = '50%';
+// TetrisArea.style.left = '50%';
+// TetrisArea.style.transform = 'translate(-50%, -80%)';
 
 // prossimoTetraminoEl.style.backgroundColor = 'red';
 prossimoTetraminoEl.width = cella * 5;
@@ -117,6 +117,41 @@ const TetraminoC = {
 
     colore : '#9b59b6'
 }
+
+      
+
+// const immaginiTetramini = {
+//       T: new Image(),
+//       L: new Image(),
+//       J: new Image(),
+//       I: new Image(),
+//       S: new Image(),
+//       Z: new Image(),
+//       O: new Image()
+// };
+
+// immaginiTetramini.T.src = "./assets/bg-tetramino/8234.jpg";
+// immaginiTetramini.L.src = "./assets/bg-tetramino/joyce.jpg";
+// immaginiTetramini.J.src = "./assets/bg-tetramino/8234.jpg";
+// immaginiTetramini.I.src = "./assets/bg-tetramino/8234.jpg";
+// immaginiTetramini.S.src = "./assets/bg-tetramino/8234.jpg";
+// immaginiTetramini.Z.src = "./assets/bg-tetramino/8234.jpg";
+// immaginiTetramini.O.src = "./assets/bg-tetramino/8234.jpg";
+
+// let immaginiCaricate = 0;
+
+// Object.values(immaginiTetramini).forEach(img => {
+//     img.onload = () => {
+//         immaginiCaricate++;
+//     }
+// });
+
+const bloccoImmagine = new Image();
+bloccoImmagine.src = "./assets/bg-tetramino/microsoft.png";
+bloccoImmagine.onload = () => {
+    console.log("immagine blocco caricata")
+}
+
 
 //Campo di gioco
 // var MatriceCampo = [
@@ -218,7 +253,7 @@ function disegnaGriglia() {
 
             ELtetris.lineWidth = 2;
             ELtetris.strokeStyle='black';
-            ELtetris.strokeRect(x, y, cella, cella);
+            // ELtetris.strokeRect(x, y, cella, cella);
         }
     }
 }
@@ -386,29 +421,29 @@ class Tetramino {
 
     ////////////////////METODO PER DISEGNARE TETRAMINO////////////////////////////////
 
+  
+
     disegna() {
 
-        ELtetris.fillStyle = this.colore;
+        // let  tetraminoTipo = ["T", "L", "J", "I", "S", "Z", "O"][valoreCasuale];
+        // let  immagine = immaginiTetramini[tetraminoTipo];
+        // ELtetris.fillStyle = this.colore;
 
         for (let righe = 0; righe < this.forma.length; righe++) {
 
             for (let colonne = 0; colonne < this.forma[righe].length; colonne++) {
-
                 if (this.forma[righe][colonne] === 1) {
-                    
                     const x = this.xpos + colonne * cella;
                     const y = this.ypos + righe * cella;
-
                     // ELtetris.fillRect(x, y, this.width, this.height);
-
-
-
                     if (y >= 120) {
-                        ELtetris.fillRect(x, y, this.width, this.height);
+                        // ELtetris.fillRect(x, y, this.width, this.height);
+                        ELtetris.drawImage(bloccoImmagine, x, y, cella, cella);
+                        
+                        ELtetris.lineWidth = 3;
                         ELtetris.strokeStyle = "#fff";
                         ELtetris.strokeRect(x, y, this.width, this.height);
                     }
-
                 }
             }
         }
@@ -456,7 +491,6 @@ calcolaGhostY() {
         if (collision) break;
         ghostY = nextY;
     }
-
     return ghostY;
 }
 
@@ -510,7 +544,9 @@ disegnaGhost() {
                     const x = (this.xpos + colonne * cella) / cella;
                     if (y >= 0 && y < MatriceCampo.length && x >= 0 && x < MatriceCampo[0].length) {
                         MatriceCampo[y][x] = this.colore;
-                        ELtetris.strokeStyle = 'white';
+                        // ELtetris.drawImage(bloccoImmagine, x , y, cella, cella)
+                        console.log('x:', x, 'y', y)
+                        ELtetris.strokeStyle = 'black';
                         ELtetris.strokeRect(x * cella, y * cella, cella, cella);
                     }
                 }
@@ -838,9 +874,11 @@ btnPlay.addEventListener("click", () => {
     if (giocoInCorso === false) {
         giocoInCorso = true;
         startGame();
-        btnPlay.innerHTML = "Pausa";
+        btnPlay.innerHTML = "PAUSA";
     } else {
         giocoInCorso = false;
+        btnPlay.innerHTML = "PLAY";
+
     }
 });
 
