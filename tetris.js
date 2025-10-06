@@ -48,7 +48,8 @@ const TetraminoT = {
         [0, 0, 0]
     ],
 
-    colore : '#3498db'
+    //colore : '#3498db'
+    texture: new Image()
 }
 
 const TetraminoL = {
@@ -58,7 +59,8 @@ const TetraminoL = {
         [0, 0, 0]
     ],
 
-    colore : '#1abc9c'
+    //colore : '#1abc9c'
+    texture: new Image()
 }
 
 const TetraminoJ = {
@@ -68,7 +70,8 @@ const TetraminoJ = {
         [0, 0, 0]
     ],
 
-    colore : '#2ecc71'
+    //colore : '#2ecc71'
+    texture: new Image()
 }
 
 const TetraminoI = {
@@ -79,7 +82,8 @@ const TetraminoI = {
         [0, 1, 0, 0]
     ],
 
-    colore : '#e74c3c'
+    //colore : '#e74c3c'
+    texture: new Image()
 }
 
 const TetraminoS = {
@@ -89,7 +93,8 @@ const TetraminoS = {
         [0, 0, 0]
     ],
 
-    colore : '#f1c40f'
+    //colore : '#f1c40f'
+    texture: new Image()
 }
 
 const TetraminoZ = {
@@ -99,7 +104,8 @@ const TetraminoZ = {
         [0, 0, 0]
     ],
 
-    colore : '#e67e22'
+    //colore : '#e67e22'
+    texture: new Image()
 }
 
 const TetraminoC = {
@@ -108,37 +114,42 @@ const TetraminoC = {
         [1, 1]
     ],
 
-    colore : '#9b59b6'
+    //colore : '#9b59b6'
+    texture: new Image()
 }
 
 const selectGraficaEl = document.getElementById('grafica');
 
-const immaginiTetramini = {
-  T: new Image(),
-  L: new Image(),
-  J: new Image(),
-  I: new Image(),
-  S: new Image(),
-  Z: new Image(),
-  O: new Image()
-};
+// const immaginiTetramini = {
+//   T: new Image(),
+//   L: new Image(),
+//   J: new Image(),
+//   I: new Image(),
+//   S: new Image(),
+//   Z: new Image(),
+//   O: new Image()
+// };
 
-immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor1.png";
-immaginiTetramini.L.src = "./assets/bg-tetramino/v1/FrameColor2.png";
-immaginiTetramini.J.src = "./assets/bg-tetramino/v1/FrameColor3.png";
-immaginiTetramini.I.src = "./assets/bg-tetramino/v1/FrameColor4.png";
-immaginiTetramini.S.src = "./assets/bg-tetramino/v1/FrameColor5.png";
-immaginiTetramini.Z.src = "./assets/bg-tetramino/v1/FrameColor6.png";
-immaginiTetramini.O.src = "./assets/bg-tetramino/v1/FrameColor7.png";
+var textureTetramini = [TetraminoT.texture, TetraminoL.texture, TetraminoJ.texture, TetraminoI.texture, TetraminoS.texture, TetraminoZ.texture, TetraminoC.texture];
 
-Object.values(immaginiTetramini).forEach(img => {
-    img.onload = () => {
-        immaginiCaricate++;
-    }
-});
+TetraminoT.texture.src = "./assets/bg-tetramino/v1/FrameColor1.png";
+TetraminoL.texture.src = "./assets/bg-tetramino/v1/FrameColor2.png";
+TetraminoJ.texture.src = "./assets/bg-tetramino/v1/FrameColor3.png";
+TetraminoI.texture.src = "./assets/bg-tetramino/v1/FrameColor4.png";
+TetraminoS.texture.src = "./assets/bg-tetramino/v1/FrameColor5.png";
+TetraminoZ.texture.src = "./assets/bg-tetramino/v1/FrameColor6.png";
+TetraminoC.texture.src = "./assets/bg-tetramino/v1/FrameColor7.png";
 
+console.log(TetraminoT);
 
-let immaginiCaricate = 0;
+// Object.values(immaginiTetramini).forEach(img => {
+//     img.onload = () => {
+//         immaginiCaricate++;
+//     }
+// });
+// console.log(immaginiTetramini.J);
+
+// let immaginiCaricate = 0;
 
 // selectGraficaEl.addEventListener("change", function() {
 //     const graficaSelezionata = selectGraficaEl.options[selectGraficaEl.selectedIndex];
@@ -187,7 +198,7 @@ for (let i = 0; i <= 23; i++) {
 
 //Array contenenti tetramini e colori
 var formetetramini = [TetraminoT.forma, TetraminoL.forma, TetraminoJ.forma, TetraminoI.forma, TetraminoS.forma, TetraminoZ.forma, TetraminoC.forma];
-var coloretramini = [TetraminoT.colore, TetraminoL.colore, TetraminoJ.colore, TetraminoI.colore, TetraminoS.colore, TetraminoZ.colore, TetraminoC.colore];
+//var coloretramini = [TetraminoT.colore, TetraminoL.colore, TetraminoJ.colore, TetraminoI.colore, TetraminoS.colore, TetraminoZ.colore, TetraminoC.colore];
 
 //Dimensioni area di gioco
 TetrisArea.height = cella * MatriceCampo.length;
@@ -242,18 +253,29 @@ function disegnaGriglia() {
             const x = colonne * cella; //calcolo posizione x cella corrente
             const y = righe * cella;   //calcolo posizione y cella corrente
 
-            if (MatriceCampo[righe][colonne] !== 0) {
+            const cellaCorrente = MatriceCampo[righe][colonne];
 
-                ELtetris.fillStyle = MatriceCampo[righe][colonne]; // Usa il colore memorizzato
+            if (cellaCorrente !== 0 && cellaCorrente !== null) {
+                // 🔹 Se la cella contiene un'immagine (oggetto Image)
+                if (cellaCorrente instanceof Image) {
+                // Assicurati che sia caricata
+                if (cellaCorrente.complete) {
+                    ELtetris.drawImage(cellaCorrente, x, y, cella, cella);
+                } else {
+                    // Se non ancora caricata, mostra un quadrato placeholder
+                    ELtetris.fillStyle = "#888";
+                    ELtetris.fillRect(x, y, cella, cella);
+                }
+                } else {
+                // 🔹 Caso vecchio: se contiene un colore (stringa)
+                ELtetris.fillStyle = cellaCorrente;
                 ELtetris.fillRect(x, y, cella, cella);
-
-            } else {
-                
+                }
             }
 
             ELtetris.lineWidth = 2;
             ELtetris.strokeStyle='black';
-            // ELtetris.strokeRect(x, y, cella, cella);
+            ELtetris.strokeRect(x, y, cella, cella);
         }
     }
 }
@@ -360,7 +382,8 @@ class Tetramino {
         this.width = cella;
         this.height = cella;
         this.forma = formetetramini[valoreCasuale];
-        this.colore = coloretramini[valoreCasuale];
+        //this.colore = coloretramini[valoreCasuale];
+        this.texture = textureTetramini[valoreCasuale];
         const larghezzaReale = this.calcolaLarghezza();
         this.xpos = Math.floor((MatriceCampo[0].length / 2 - larghezzaReale / 2)) * cella;
         if (this.forma ===  formetetramini[3]) {
@@ -425,9 +448,10 @@ class Tetramino {
 
     disegna() {
 
-        let  tetraminoTipo = ["T", "L", "J", "I", "S", "Z", "O"][valoreCasuale];
-        let  immagine = immaginiTetramini[tetraminoTipo];
-        ELtetris.fillStyle = this.colore;
+        // let  tetraminoTipo = ["T", "L", "J", "I", "S", "Z", "O"][valoreCasuale];
+        // let  immagine = immaginiTetramini[tetraminoTipo];
+        
+        //ELtetris.fillStyle = this.colore;
 
         for (let righe = 0; righe < this.forma.length; righe++) {
 
@@ -438,7 +462,7 @@ class Tetramino {
                     // ELtetris.fillRect(x, y, this.width, this.height);
                     if (y >= 120) {
                         // ELtetris.fillRect(x, y, this.width, this.height);
-                        ELtetris.drawImage(immagine, x, y, cella, cella);
+                        ELtetris.drawImage(this.texture, x, y, cella, cella);
                         
                         ELtetris.lineWidth = 1;
                         ELtetris.strokeStyle = "#fff";
@@ -540,7 +564,8 @@ disegnaGhost() {
                     const y = (this.ypos + righe * cella) / cella;
                     const x = (this.xpos + colonne * cella) / cella;
                     if (y >= 0 && y < MatriceCampo.length && x >= 0 && x < MatriceCampo[0].length) {
-                        MatriceCampo[y][x] = this.colore;
+                        //MatriceCampo[y][x] = this.colore;
+                        MatriceCampo[y][x] = this.texture;
                         // ELtetris.drawImage(bloccoImmagine, x * cella , y * cella, cella, cella)
                         console.log('x:', x, 'y', y)
                         ELtetris.strokeStyle = 'black';
