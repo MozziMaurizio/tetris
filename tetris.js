@@ -24,19 +24,12 @@ var yposinizialegriglia = 0;
 
 var valoreCasuale = Math.floor(Math.random() * 7);
 
-//Stile e posizionamento dell'area di gioco
-// TetrisArea.style.background = 'red';
-// TetrisArea.style.position = 'absolute';
-// TetrisArea.style.top = '50%';
-// TetrisArea.style.left = '50%';
-// TetrisArea.style.transform = 'translate(-50%, -80%)';
 
-// prossimoTetraminoEl.style.backgroundColor = 'red';
+
 prossimoTetraminoEl.width = cella * 5;
 prossimoTetraminoEl.height = cella * 4;
 
 
-// prossimoTetraminoEl.style.border-radius
 
 var ultimoAggiornamento = Date.now();  //Prende il tempo attuale in ms
 var tempoCaduta = 1000;  //intervallo di tempo
@@ -118,64 +111,71 @@ const TetraminoC = {
     colore : '#9b59b6'
 }
 
-      
+const selectGraficaEl = document.getElementById('grafica');
 
-// const immaginiTetramini = {
-//       T: new Image(),
-//       L: new Image(),
-//       J: new Image(),
-//       I: new Image(),
-//       S: new Image(),
-//       Z: new Image(),
-//       O: new Image()
-// };
+const immaginiTetramini = {
+  T: new Image(),
+  L: new Image(),
+  J: new Image(),
+  I: new Image(),
+  S: new Image(),
+  Z: new Image(),
+  O: new Image()
+};
 
-// immaginiTetramini.T.src = "./assets/bg-tetramino/8234.jpg";
-// immaginiTetramini.L.src = "./assets/bg-tetramino/joyce.jpg";
-// immaginiTetramini.J.src = "./assets/bg-tetramino/8234.jpg";
-// immaginiTetramini.I.src = "./assets/bg-tetramino/8234.jpg";
-// immaginiTetramini.S.src = "./assets/bg-tetramino/8234.jpg";
-// immaginiTetramini.Z.src = "./assets/bg-tetramino/8234.jpg";
-// immaginiTetramini.O.src = "./assets/bg-tetramino/8234.jpg";
+immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor1.png";
+immaginiTetramini.L.src = "./assets/bg-tetramino/v1/FrameColor2.png";
+immaginiTetramini.J.src = "./assets/bg-tetramino/v1/FrameColor3.png";
+immaginiTetramini.I.src = "./assets/bg-tetramino/v1/FrameColor4.png";
+immaginiTetramini.S.src = "./assets/bg-tetramino/v1/FrameColor5.png";
+immaginiTetramini.Z.src = "./assets/bg-tetramino/v1/FrameColor6.png";
+immaginiTetramini.O.src = "./assets/bg-tetramino/v1/FrameColor7.png";
 
-// let immaginiCaricate = 0;
+Object.values(immaginiTetramini).forEach(img => {
+    img.onload = () => {
+        immaginiCaricate++;
+    }
+});
 
-// Object.values(immaginiTetramini).forEach(img => {
-//     img.onload = () => {
-//         immaginiCaricate++;
+
+let immaginiCaricate = 0;
+
+// selectGraficaEl.addEventListener("change", function() {
+//     const graficaSelezionata = selectGraficaEl.options[selectGraficaEl.selectedIndex];
+//     if (graficaSelezionata === 1) {
+//         immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor1.png";
+//         immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor2.png";
+//         immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor3.png";
+//         immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor4.png";
+//         immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor5.png";
+//         immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor6.png";
+//         immaginiTetramini.T.src = "./assets/bg-tetramino/v1/FrameColor7.png";
+
+//         Object.values(immaginiTetramini).forEach(img => {
+//             img.onload = () => {
+//                 immaginiCaricate++;
+//             }
+//         });
+        
+//     } else if (graficaSelezionata === 2) {
+
 //     }
-// });
+//     // console.log('grafica:', graficaSelezionata, 'index:', selectGraficaEl.selectedIndex)
 
-const bloccoImmagine = new Image();
-bloccoImmagine.src = "./assets/bg-tetramino/microsoft.png";
-bloccoImmagine.onload = () => {
-    console.log("immagine blocco caricata")
-}
+// })
 
 
-//Campo di gioco
-// var MatriceCampo = [
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-// ];
+
+
+
+
+// const bloccoImmagine = new Image();
+// bloccoImmagine.src = "./assets/bg-tetramino/microsoft.png";
+// bloccoImmagine.onload = () => {
+//     console.log("immagine blocco caricata")
+// }
+
+
 
 var MatriceCampo = [];
 
@@ -425,9 +425,9 @@ class Tetramino {
 
     disegna() {
 
-        // let  tetraminoTipo = ["T", "L", "J", "I", "S", "Z", "O"][valoreCasuale];
-        // let  immagine = immaginiTetramini[tetraminoTipo];
-        // ELtetris.fillStyle = this.colore;
+        let  tetraminoTipo = ["T", "L", "J", "I", "S", "Z", "O"][valoreCasuale];
+        let  immagine = immaginiTetramini[tetraminoTipo];
+        ELtetris.fillStyle = this.colore;
 
         for (let righe = 0; righe < this.forma.length; righe++) {
 
@@ -438,9 +438,9 @@ class Tetramino {
                     // ELtetris.fillRect(x, y, this.width, this.height);
                     if (y >= 120) {
                         // ELtetris.fillRect(x, y, this.width, this.height);
-                        ELtetris.drawImage(bloccoImmagine, x, y, cella, cella);
+                        ELtetris.drawImage(immagine, x, y, cella, cella);
                         
-                        ELtetris.lineWidth = 3;
+                        ELtetris.lineWidth = 1;
                         ELtetris.strokeStyle = "#fff";
                         ELtetris.strokeRect(x, y, this.width, this.height);
                     }
@@ -448,9 +448,6 @@ class Tetramino {
             }
         }
     }
-
-
-    // --- ADD THIS INSIDE class Tetramino, subito dopo il metodo disegna() ---
 
 calcolaGhostY() {
     // ritorna la y (in px) dove il tetramino atterrerà senza modificarne lo stato
@@ -544,7 +541,7 @@ disegnaGhost() {
                     const x = (this.xpos + colonne * cella) / cella;
                     if (y >= 0 && y < MatriceCampo.length && x >= 0 && x < MatriceCampo[0].length) {
                         MatriceCampo[y][x] = this.colore;
-                        // ELtetris.drawImage(bloccoImmagine, x , y, cella, cella)
+                        // ELtetris.drawImage(bloccoImmagine, x * cella , y * cella, cella, cella)
                         console.log('x:', x, 'y', y)
                         ELtetris.strokeStyle = 'black';
                         ELtetris.strokeRect(x * cella, y * cella, cella, cella);
@@ -798,6 +795,7 @@ document.addEventListener("keyup", (event) => {
 
     calmate = true;
 });
+
 
 function aggiorna() {
     ELtetris.clearRect(0, 0, TetrisArea.width, TetrisArea.height);
