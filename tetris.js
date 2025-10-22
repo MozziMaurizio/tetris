@@ -5,6 +5,8 @@ const TetrisArea = document.getElementById('Areadigioco');
 //Contenuto Canvas
 var ELtetris = TetrisArea.getContext('2d');
 
+let canvasCnt = document.querySelector('.canvas-cnt');
+
 const prossimoTetraminoEl = document.getElementById('prossimoTetramino');
 const prossimoTetraminoCtx = prossimoTetraminoEl.getContext('2d');
 
@@ -12,7 +14,7 @@ const prossimoTetraminoCtx = prossimoTetraminoEl.getContext('2d');
 
 
 // Grandezza blocco 36
-var cella = 30;
+var cella = 25;
 var punteggio = 0;
 var puntiBasePerRiga = 100;
 
@@ -203,6 +205,11 @@ var formetetramini = [TetraminoT.forma, TetraminoL.forma, TetraminoJ.forma, Tetr
 //Dimensioni area di gioco
 TetrisArea.height = cella * MatriceCampo.length;
 TetrisArea.width = cella * MatriceCampo[0]. length;
+// TetrisArea.style.top = "-120px";
+TetrisArea.style.top = -cella * righeInvisibili + "px";
+canvasCnt.style.height = cella * (MatriceCampo.length - righeInvisibili) + "px";
+canvasCnt.style.width = cella * MatriceCampo[0]. length + "px";
+
 
 /////////////////////////////////////////////FUNZIONE ELIMINARE RIGA E PUNTEGGIO//////////////////////////////////////////////////////
 
@@ -316,7 +323,7 @@ function difficoltàClassicMode () {
     } else {
         // livello iniziale
         tempoCaduta = 1000;
-        puntiBasePerRiga = 10000;
+        // puntiBasePerRiga = 10000;
     }
 }
 

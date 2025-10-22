@@ -9,20 +9,11 @@
 }
 
 body{
-    background: 
-                /* url('./assets/background/city/8.png') center center / contain no-repeat,
-                url('./assets/background/city/7.png') center center / contain no-repeat,
-                url('./assets/background/city/6.png') center center / contain no-repeat,
-                url('./assets/background/city/5.png') center center / contain no-repeat,
-                url('./assets/background/city/4.png') center center / contain no-repeat,
-                url('./assets/background/city/3.png') center center / contain no-repeat,
-                url('./assets/background/city/2.png') center center / contain no-repeat, */
-                url('./assets/background/city/9.png') center center / contain no-repeat;
-                
+  background-color: rgb(62, 60, 60);
+    /* background:url('./assets/background/city/9.png') center center / contain no-repeat;
     background-attachment: fixed;
-    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
     background-size: cover;
-    overflow: hidden;
+    overflow: hidden; */
     font-family: "Orbitron", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
@@ -46,55 +37,56 @@ body{
 }
 
 
-/* #Areadigioco {
+#Areadigioco {
   position: absolute;
-  top: 22%;
-  left: 28%;
-  border: solid 1px black;
 }
- */
+
 .stats {
   border: solid 1px black;
-  width: 300px;
-  height: 600px;
 }
 
+.title-cnt h1 {
+  font-size: 50px;
+}
 
+.title-cnt {
+}
 
 #play-btn {
-     --line-w-inner: 1px /* inner line thickness */;
-	--line-w-outer: 2px /* outer line thickness */;
-	border: 1px solid rgba(255, 255, 255, 0.3);
-	box-shadow: 0 0 0 var(--line-w-outer) rgb(255, 255, 255) /* outer border line */, 
-      	inset 0 0 0 var(--line-w-inner) violet /* inner border line */;
-   background: linear-gradient(
-  135deg,
-  rgba(21, 22, 21, 0.659) 0%,
-  rgba(17, 20, 17, 0.427) 50%,
-  rgba(16, 18, 17, 0.3) 100%
-);
-    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
-    backdrop-filter: blur(2px);
-    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-  width: 100%;
-  height: 35px;
   color: white;
   font-family: "Orbitron", sans-serif;
-  margin-top: 10px;
   cursor: pointer;
 }
 
-#play-btn:hover {
-  transform: scale(1.06);
+.canvas-cnt {
+  border: 1px solid blue;
+  position: relative;
 }
 
-.cnt{
+.punteggio {
+  border: 1px solid green;
+}
+
+/* .content {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  height: 100vh;
+} */
+
+.cnt {
+  display: flex;
+  gap: 45px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100dvh;
+  width: 100vw;
+}
+
+.cnt-game{
+  border: 1px solid red;
   display: grid;
   grid-template-columns: auto auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  gap:30px;
-  align-items: center;
+  gap: 30px;
 }
