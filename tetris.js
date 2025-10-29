@@ -5,7 +5,7 @@ const TetrisArea = document.getElementById('Areadigioco');
 //Contenuto Canvas
 var ELtetris = TetrisArea.getContext('2d');
 
-let canvasCnt = document.querySelector('.canvas-cnt');
+let canvasCnt = document.querySelector('.cnt-canvas');
 
 const prossimoTetraminoEl = document.getElementById('prossimoTetramino');
 const prossimoTetraminoCtx = prossimoTetraminoEl.getContext('2d');
@@ -360,6 +360,9 @@ function disegnaProssimoTetramino() {
 
 
     var prossimotetramino = new Tetramino();
+    // console.log("ccccc" + ((prossimotetramino.forma.length * cella) / 2));
+    // console.log("aaaaa" + ((prossimotetramino.forma.length * cella) / 2));
+    console.log("bbbbb" + (prossimotetramino.forma.length * cellaPT));
 
 
     prossimoTetraminoCtx.fillStyle = prossimotetramino.colore;
@@ -368,13 +371,21 @@ function disegnaProssimoTetramino() {
     for (let riga = 0; riga < prossimotetramino.forma.length; riga++ ) {
         for (let colonna = 0; colonna < prossimotetramino.forma[riga].length; colonna++ ) {
             if (prossimotetramino.forma[riga][colonna] !== 0) {
+                //per posizione X trattiamo il nextTetramino come se fosse in pos absolute, facciamo 50% del contenitore - 50% di sè stesso + furmuletta per disegnarlo, Eccezione per la I nel lenght e togliendo una cella perché ha una struttura diversa
                 if (prossimotetramino.forma === formetetramini[3]) {
-                    var x = colonna * cellaPT + cellaPT;
+                    var x = (((prossimoTetraminoEl.width / 2) - (((prossimotetramino.forma.length - 3) * cellaPT) / 2)) + colonna * cellaPT) - cellaPT;
                 } else {
-                    var x = colonna * cellaPT;
+                    var x = ((prossimoTetraminoEl.width / 2) - ((prossimotetramino.forma.length * cellaPT) / 2)) + colonna * cellaPT;
                 }
 
-                const y = riga * cellaPT;
+                //per posizione Y trattiamo il nextTetramino come se fosse in pos absolute, facciamo 50% del contenitore - 50% di sè stesso + furmuletta per disegnarlo, Eccezione per la tutti tranne I e Cubo nel lenght perché ha una nella struttura in verticale hanno una riga in più
+                if (prossimotetramino.forma === formetetramini[3] || prossimotetramino.forma === formetetramini[6]) {
+                    var y = ((prossimoTetraminoEl.height / 2) - ((prossimotetramino.forma.length * cellaPT) / 2)) + riga * cellaPT;
+                } else {
+                    console.log("suca")
+                    var y = ((prossimoTetraminoEl.height / 2) - (((prossimotetramino.forma.length - 1) * cellaPT) / 2)) + riga * cellaPT;
+                }
+                
                 prossimoTetraminoCtx.fillRect(x, y, cellaPT, cellaPT);
             }
         }

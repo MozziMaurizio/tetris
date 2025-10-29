@@ -36,44 +36,6 @@ body{
     transform: translate(-50%, -50%);
 }
 
-
-#Areadigioco {
-  position: absolute;
-}
-
-.stats {
-  border: solid 1px black;
-}
-
-.title-cnt h1 {
-  font-size: 50px;
-}
-
-.title-cnt {
-}
-
-#play-btn {
-  color: white;
-  font-family: "Orbitron", sans-serif;
-  cursor: pointer;
-}
-
-.canvas-cnt {
-  border: 1px solid blue;
-  position: relative;
-}
-
-.punteggio {
-  border: 1px solid green;
-}
-
-/* .content {
-  display: flex;
-  justify-content: center;
-  align-self: center;
-  height: 100vh;
-} */
-
 .cnt {
   display: flex;
   gap: 45px;
@@ -84,9 +46,52 @@ body{
   width: 100vw;
 }
 
+.cnt-title h1 {
+  font-size: 56px;
+}
+
 .cnt-game{
-  border: 1px solid red;
   display: grid;
   grid-template-columns: auto auto;
   gap: 30px;
+}
+
+.cnt-canvas {
+  border: 1px solid blue;
+  position: relative;
+}
+
+#Areadigioco {
+  position: absolute;
+}
+
+.stats {
+  border: solid 1px black;
+  color: aliceblue;
+}
+
+.cnt-prossimo-tetramino{
+  border: 1px solid red;
+}
+
+.cnt-prossimo-tetramino p{
+  font-size: 28px;
+}
+
+.cnt-prossimo-tetramino canvas{
+  border: 1px solid rgb(0, 204, 255);
+}
+
+.cnt-punteggio {
+  border: 1px solid green;
+}
+
+.cnt-btn{
+  border: 1px solid pink;
+}
+
+#play-btn {
+  color: white;
+  font-family: "Orbitron", sans-serif;
+  cursor: pointer;
 }

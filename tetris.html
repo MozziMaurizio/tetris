@@ -10,28 +10,30 @@
     <link rel="stylesheet" href="tetris.css">
 </head>
 <body>
-    <!-- <div class="content"> -->
-        <div class="cnt">
-            <div class="title-cnt">
-                <h1>TETRIS GAME</h1>
+    <div class="cnt">
+        <div class="cnt-title">
+            <h1>TETRIS GAME</h1>
+        </div>
+        <div class="cnt-game">
+            <div class="cnt-canvas">
+                <canvas id="Areadigioco"></canvas>
             </div>
-            <div class="cnt-game">
-                <div class="canvas-cnt">
-                    <canvas id="Areadigioco"></canvas>
+            <div class="stats">
+                <div class="cnt-prossimo-tetramino">
+                    <p>Next</p>
+                    <canvas id="prossimoTetramino"></canvas>
                 </div>
-                <div class="stats">
-                    <div class="prossimo-tetramino">
-                        <canvas id="prossimoTetramino" style="padding: 20px 0 0 80px;"></canvas>
-                    </div>
-                    <div class="punteggio">
-                        <p id="punteggio" style="color: aliceblue;">0</p>
-                        <p id="moltiplicatore" style="color: aliceblue;">X 1</p>
-                    </div>
-                    <button id="play-btn">PLAY</button>
+                <div class="cnt-punteggio">
+                    <p id="punteggio">0</p>
+                    <p id="moltiplicatore">X 1</p>
                 </div>
+                <div class="cnt-btn">
+
+                </div>
+                <button id="play-btn">PLAY</button>
             </div>
         </div>
-    <!-- </div> -->
+    </div>
     <p id="countdown-start"></p>
     <script src="tetris.js"></script>
 </body>
