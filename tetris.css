@@ -72,10 +72,12 @@ body{
 
 .cnt-prossimo-tetramino{
   border: 1px solid red;
+  line-height: 0;
 }
 
 .cnt-prossimo-tetramino p{
   font-size: 28px;
+  line-height: normal;
 }
 
 .cnt-prossimo-tetramino canvas{

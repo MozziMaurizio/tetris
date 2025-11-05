@@ -205,6 +205,7 @@ var formetetramini = [TetraminoT.forma, TetraminoL.forma, TetraminoJ.forma, Tetr
 //Dimensioni area di gioco
 TetrisArea.height = cella * MatriceCampo.length;
 TetrisArea.width = cella * MatriceCampo[0]. length;
+console.log(MatriceCampo. length)
 // TetrisArea.style.top = "-120px";
 TetrisArea.style.top = -cella * righeInvisibili + "px";
 canvasCnt.style.height = cella * (MatriceCampo.length - righeInvisibili) + "px";
@@ -263,7 +264,7 @@ function disegnaGriglia() {
             const cellaCorrente = MatriceCampo[righe][colonne];
 
             if (cellaCorrente !== 0 && cellaCorrente !== null) {
-                // 🔹 Se la cella contiene un'immagine (oggetto Image)
+                // Se la cella contiene un'immagine (oggetto Image)
                 if (cellaCorrente instanceof Image) {
                 // Assicurati che sia caricata
                 if (cellaCorrente.complete) {
@@ -274,7 +275,7 @@ function disegnaGriglia() {
                     ELtetris.fillRect(x, y, cella, cella);
                 }
                 } else {
-                // 🔹 Caso vecchio: se contiene un colore (stringa)
+                // Caso vecchio: se contiene un colore (stringa)
                 ELtetris.fillStyle = cellaCorrente;
                 ELtetris.fillRect(x, y, cella, cella);
                 }
@@ -295,35 +296,34 @@ disegnaGriglia();
 function difficoltàClassicMode () {
     if (punteggio >= 195000) {
         tempoCaduta = 100;
-        //puntiBasePerRiga = 325;
+        puntiBasePerRiga = 325;
     } else if (punteggio >= 155000) {
         tempoCaduta = 130;
-        //puntiBasePerRiga = 300;
+        puntiBasePerRiga = 300;
     } else if (punteggio >= 120000) {
         tempoCaduta = 180;
-        //puntiBasePerRiga = 275;
+        puntiBasePerRiga = 275;
     } else if (punteggio >= 90000) {
         tempoCaduta = 250;
-        //puntiBasePerRiga = 250;
+        puntiBasePerRiga = 250;
     } else if (punteggio >= 65000) {
         tempoCaduta = 325;
-        //puntiBasePerRiga = 225;
+        puntiBasePerRiga = 225;
     } else if (punteggio >= 45000) {
         tempoCaduta = 425;
-        //puntiBasePerRiga = 200;
+        puntiBasePerRiga = 200;
     } else if (punteggio >= 30000) {
         tempoCaduta = 550;
-        //puntiBasePerRiga = 175;
+        puntiBasePerRiga = 175;
     } else if (punteggio >= 20000) {
         tempoCaduta = 700;
-        //puntiBasePerRiga = 150;
+        puntiBasePerRiga = 150;
     } else if (punteggio >= 10000) {
         tempoCaduta = 850;
-        //puntiBasePerRiga = 125;
+        puntiBasePerRiga = 125;
     } else {
         // livello iniziale
         tempoCaduta = 1000;
-        // puntiBasePerRiga = 10000;
     }
 }
 
@@ -406,7 +406,7 @@ class Tetramino {
         this.xpos = Math.floor((MatriceCampo[0].length / 2 - larghezzaReale / 2)) * cella;
         if (this.forma ===  formetetramini[3]) {
             this.ypos = 0;
-        } else {this.ypos = 60;};
+        } else {this.ypos = cella * 2;};
     }
 
     ////////////////////METODO PER RUOTARE////////////////////////////////
@@ -478,7 +478,7 @@ class Tetramino {
                     const x = this.xpos + colonne * cella;
                     const y = this.ypos + righe * cella;
                     // ELtetris.fillRect(x, y, this.width, this.height);
-                    if (y >= 120) {
+                    if (y >= cella * 4) {
                         // ELtetris.fillRect(x, y, this.width, this.height);
                         ELtetris.drawImage(this.texture, x, y, cella, cella);
                         
