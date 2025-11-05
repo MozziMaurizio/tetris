@@ -11,7 +11,7 @@ const prossimoTetraminoEl = document.getElementById('prossimoTetramino');
 const prossimoTetraminoCtx = prossimoTetraminoEl.getContext('2d');
 
 
-
+//mauri gay lestofante
 
 // Grandezza blocco 36
 var cella = 25;
