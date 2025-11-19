@@ -281,8 +281,8 @@ function disegnaGriglia() {
                 }
             }
 
-            ELtetris.lineWidth = 2;
-            ELtetris.strokeStyle='black';
+            ELtetris.lineWidth = 0.5;
+            ELtetris.strokeStyle='rgba(197, 71, 216, 0.4)';
             ELtetris.strokeRect(x, y, cella, cella);
         }
     }
