@@ -82,9 +82,9 @@ button, input, textarea{
 .cnt-canvas img{
   z-index: 10;
   position: relative;
-  left: -15px;
-  top: -15px;
-  width: 331px;
+  left: -42.5px;
+  top: -42.5px;
+  width: 385px;
 }
 
 .overlay-black{

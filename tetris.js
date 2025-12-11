@@ -10,17 +10,28 @@ let canvasCnt = document.querySelector('.cnt-canvas');
 const prossimoTetraminoEl = document.getElementById('prossimoTetramino');
 const prossimoTetraminoCtx = prossimoTetraminoEl.getContext('2d');
 
-
-//mauri gay lestofante
-
 // Grandezza blocco 36
-var cella = 25;
+var cella = 30;
 var punteggio = 0;
 var puntiBasePerRiga = 100;
 
+function aggiornaCella(){
+    if(window.innerWidth >= 1280){
+        cella = 30
+    } else if (window.innerWidth >= 769){
+        cella = 25
+    } else if (window.innerWidth >= 480){
+        cella = 20
+    } else {
+        cella = 15
+    }
+    console.log(cella)
+}
+
+document.addEventListener("DOMContentLoaded", aggiornaCella);
+
 //grandezza blocco  prossimo tetramino
 var cellaPT = cella / 1.2;
-
 
 var yposinizialegriglia = 0;
 
